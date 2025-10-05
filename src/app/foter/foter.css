@@ -1,0 +1,181 @@
+/* =========================================================
+   FOOTER (tema FitLife) — alineado a la izquierda
+   Usa tokens globales: --primary, --primary-d, --accent, --accent-d,
+   --sidebar-bg, --sidebar-sep, --text-muted, etc.
+   Y define el ancho del sidebar:
+========================================================= */
+
+
+/* ---------- Base ---------- */
+.footer{
+  position: relative;
+  background: var(--sidebar-bg, #0F172A);
+  color: #E2E8F0;
+  border-top: 1px solid var(--sidebar-sep, rgba(255,255,255,.06));
+  animation: fadeInUp .6s ease-out;
+  box-sizing: border-box;
+  margin-left: 11rem;
+}
+
+/* barra superior con degradado verde→azul (marca) */
+.footer::before{
+  content:"";
+  position:absolute; inset:0 auto auto 0;
+  height:3px; width:100%;
+  background: linear-gradient(90deg, var(--accent, #8FD127), var(--primary, #0F7EC5));
+  opacity:.95;
+}
+
+/* ---------- Contenido interno (ALINEADO A LA IZQUIERDA) ---------- */
+/* Quitamos el centrado (margin:0 auto) y lo dejamos pegado a la izquierda.
+   Si quieres que ocupe todo el ancho, cambia max-width: none; */
+.footer-content{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap:40px;
+  padding:48px 40px;
+  max-width:1200px;
+  margin:0;                     /* ⬅️ clave: NO centrar */
+  box-sizing: border-box;
+}
+
+/* ---------- Animaciones ---------- */
+.footer-section{
+  opacity:0;
+  animation: slideInFooter .5s ease-out forwards;
+}
+.footer-section:nth-child(1){ animation-delay:.10s; }
+.footer-section:nth-child(2){ animation-delay:.20s; }
+.footer-section:nth-child(3){ animation-delay:.30s; }
+.footer-section:nth-child(4){ animation-delay:.40s; }
+
+@keyframes slideInFooter{
+  from{ opacity:0; transform:translateY(20px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeInUp{
+  from{ opacity:0; transform: translateY(30px); }
+  to  { opacity:1; transform: translateY(0); }
+}
+
+/* ---------- Títulos ---------- */
+.footer-title{
+  font-size:16px;
+  font-weight:600;
+  margin-bottom:16px;
+  color:#FFFFFF;
+  position:relative;
+  display:inline-block;
+}
+.footer-title::after{
+  content:"";
+  position:absolute; bottom:-4px; left:0;
+  width:0; height:2px;
+  background: linear-gradient(90deg, var(--primary,#0F7EC5), var(--accent,#8FD127));
+  transition:width .3s ease;
+}
+.footer-section:hover .footer-title::after{ width:100%; }
+
+/* ---------- Enlaces ---------- */
+.footer-links{
+  list-style:none;
+  display:flex; flex-direction:column; gap:10px;
+}
+.footer-links a{
+  color:#9FB0C5;              /* neutro claro para fondo dark */
+  text-decoration:none; font-size:14px;
+  transition: color .2s ease, transform .2s ease;
+  display:inline-block; position:relative;
+}
+.footer-links a::before{
+  content:"";
+  position:absolute; left:0; bottom:-2px;
+  width:0; height:1px;
+  background: var(--primary, #0F7EC5);   /* subrayado azul */
+  transition:width .25s ease;
+}
+.footer-links a:hover{
+  color:#FFFFFF;
+  transform:translateX(4px);
+}
+.footer-links a:hover::before{ width:100%; }
+
+/* ---------- Redes ---------- */
+.social-links{
+  display:flex; gap:12px; margin-top:8px;
+}
+.social-link{
+  width:40px; height:40px; border-radius:50%;
+  background: var(--sidebar-hover, #1F2937);
+  display:flex; align-items:center; justify-content:center;
+  color:#FFFFFF; position:relative; overflow:hidden;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+}
+.social-link::before{
+  content:""; position:absolute; top:50%; left:50%;
+  width:0; height:0; border-radius:50%;
+  background: rgba(255,255,255,.12);
+  transform: translate(-50%, -50%);
+  transition: width .35s ease, height .35s ease;
+}
+.social-link:hover::before{ width:120%; height:120%; }
+/* hover con azul de marca */
+.social-link:hover{
+  background: linear-gradient(180deg, var(--primary,#0F7EC5), var(--primary-d,#0D6EAD));
+  color:#FFFFFF;
+  transform: translateY(-4px) scale(1.06);
+  box-shadow: 0 10px 22px rgba(15,126,197,.28);
+}
+.social-link svg{
+  width:20px; height:20px; position:relative; z-index:1;
+  transition: transform .35s ease;
+}
+.social-link:hover svg{ transform: rotate(8deg) scale(1.05); }
+
+/* ---------- Copy ---------- */
+.footer-bottom{
+  border-top:1px solid var(--sidebar-sep, rgba(255,255,255,.06));
+  padding:24px 40px; text-align:left;       /* ⬅️ alineado a la izquierda */
+}
+.footer-bottom p{
+  color: var(--text-muted, #94A3B8);
+  font-size:14px; margin:0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:768px){
+  .footer-content{
+    grid-template-columns: repeat(2, 1fr);
+    gap:32px; padding:32px 20px;
+  }
+  .footer-bottom{ padding:20px; }
+}
+@media (max-width:480px){
+  .footer-content{ grid-template-columns:1fr; gap:24px; }
+}
+
+/* =========================================================
+   OFFSET DINÁMICO (SOLO si el footer está FUERA de <main>)
+   Alinea el footer con el contenido cuando el sidebar está visible.
+   Requiere que en el DOM sea: <main.main-content> ... </main> <footer.footer> ...
+========================================================= */
+/* Estado base a ancho completo */
+.main-content ~ .footer{
+  margin-left: 0;
+  width: 100%;
+  transition: margin-left .3s cubic-bezier(.4,0,.2,1), width .3s cubic-bezier(.4,0,.2,1);
+}
+
+/* Sidebar visible => empuja el footer */
+.main-content:not(.sidebar-hidden) ~ .footer{
+  margin-left: var(--sidebar-w);
+  width: calc(100% - var(--sidebar-w));
+}
+
+/* En móvil vuelve a 100% */
+@media (max-width: 768px){
+  .main-content:not(.sidebar-hidden) ~ .footer{
+    margin-left: 0;
+    width: 100%;
+  }
+}
