@@ -1,0 +1,23 @@
+import { z } from "zod";
+
+export interface healthInfo {
+    pesokg: number;
+    estaturacm: number;
+    nivel: string | "BAJO" | "INTERMEDIO" | "AVANZADO";
+    alergias: string[];
+    condiciones: string[];
+}
+
+export const healthInfoSchema = z.object({
+    pesokg: z.number().min(30, "El peso debe ser al menos 30 kg").max(300, "El peso no puede exceder los 300 kg"),
+    estaturacm: z.number().min(100, "La estatura debe ser al menos 100 cm").max(250, "La estatura no puede exceder los 250 cm"),
+    nivel: z.enum(["BAJO", "INTERMEDIO", "AVANZADO"]),
+    alergias: z.array(z.string()),
+    condiciones: z.array(z.string()),
+});
+
+export type HealthInfo = z.infer<typeof healthInfoSchema>;
+
+export interface userHealthResponse {
+    profile_completed: boolean;
+}

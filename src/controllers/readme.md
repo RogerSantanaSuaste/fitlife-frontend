@@ -1,0 +1,2 @@
+Aquí van los controladores de cada función, se tratan de multiples funciones que emplean los servicios y modelos para realizar las acciones que se piden en la app.
+Las funciones exportadas de los controladores se utilizan en el front end para obtener datos.
