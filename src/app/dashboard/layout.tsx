@@ -1,9 +1,9 @@
 
 import "./dashboard.css"; 
-import Header from "../header/page";    
-import "../header/header.css"; 
-import Foter from "../foter/page";    
-import "../foter/foter.css"; 
+import Header from "../components/header";    
+import "../components/footer.css";  
+import Foter from "../components/footer";      
+import "../components/header.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

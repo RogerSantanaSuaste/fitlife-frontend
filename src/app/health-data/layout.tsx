@@ -1,4 +1,4 @@
-import "./reminder.css"; 
+import "./health-data.css";
 import Header from "../components/header";    
 import "../components/footer.css";  
 import Foter from "../components/footer";      
