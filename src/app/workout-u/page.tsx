@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 
 type Routine = {
   id: string;
@@ -11,9 +12,9 @@ type Routine = {
 };
 
 const INITIAL: Routine[] = [
-  { id: "r1", title: "Rutina de pecho",    duration: "25 min", level: "Intermedio",   favorite: false },
-  { id: "r2", title: "Rutina de espalda",  duration: "30 min", level: "Principiante", favorite: false },
-  { id: "r3", title: "Piernas y glúteos",  duration: "40 min", level: "Avanzado",     favorite: false },
+  { id: "r1", title: "Rutina de pecho", duration: "25 min", level: "Intermedio", favorite: false },
+  { id: "r2", title: "Rutina de espalda", duration: "30 min", level: "Principiante", favorite: false },
+  { id: "r3", title: "Piernas y glúteos", duration: "40 min", level: "Avanzado", favorite: false },
 ];
 
 export default function RutinasPage() {
@@ -56,9 +57,11 @@ export default function RutinasPage() {
               />
             </div>
 
-            <button className="btn btn--primary" onClick={() => alert("Crea tu modal/flow de nueva rutina 🙂")}>
-              Crear rutina
-            </button>
+            <Link href="./create-workout-u">
+              <button className="btn btn--primary" onClick={() => alert("Vamos a crear una rutina")}>
+                Crear rutina
+              </button>
+            </Link>
           </div>
         </header>
 
