@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { registrationController } from "@/controllers/registrationController";
 
 export default function RegistroPage() {
   const [mounted, setMounted] = useState(false);
@@ -10,27 +11,38 @@ export default function RegistroPage() {
 
   useEffect(() => setMounted(true), []);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     const data = new FormData(e.currentTarget);
-    const payload = {
-      email: String(data.get("email") || ""),
-      nombre: String(data.get("nombre") || ""),
-      apellido: String(data.get("apellido") || ""),
-      genero: String(data.get("genero") || ""),
-      terms: Boolean(data.get("terms")),
-    };
+    const rawGender = String(data.get("genero") || "").toLowerCase();
+    let gender: "masculino" | "femenino" | "otro" = "otro";
+    if (rawGender === "masculino") gender = "masculino";
+    else if (rawGender === "femenino") gender = "femenino";
 
+    const payload = {
+      firstName: String(data.get("nombre") || ""),
+      lastName: String(data.get("apellido") || ""),
+      email: String(data.get("email") || ""),
+      password: String(data.get("password") || ""),
+      gender,
+      returnSecureToken: true,
+    };
+    const termsAccepted = data.get("terms");
     // Conecta aquí tu backend/Firebase
-    setTimeout(() => {
+    try {
+      // Llamar al controlador:
+      const response = await registrationController.signUp(payload, Boolean(termsAccepted));
+      console.log("Usuario registrado:", response);
+      alert("Registro exitoso. Ahora puedes iniciar sesión.");
+      // Redirigir a login
+      window.location.href = "/login";
+    } catch (error: any) {
+      console.error("Error en el registro:", error.message);
+      alert(`Error en el registro: ${error.message}`);
       setLoading(false);
-      alert(`Registro enviado ✅
-Nombre: ${payload.nombre} ${payload.apellido}
-Correo: ${payload.email}
-Género: ${payload.genero}`);
-    }, 800);
+    }
   };
 
   // Ripple con variables CSS
@@ -126,7 +138,7 @@ Género: ${payload.genero}`);
                   <input
                     type="radio"
                     name="genero"
-                    value="Femenino"
+                    value="femenino"
                     required
                     className="radio-input"
                   />
@@ -136,7 +148,7 @@ Género: ${payload.genero}`);
                   <input
                     type="radio"
                     name="genero"
-                    value="Masculino"
+                    value="masculino"
                     className="radio-input"
                   />
                   <span>Masculino</span>
