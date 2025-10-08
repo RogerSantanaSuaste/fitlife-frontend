@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Routine, routineSchema } from "@/models/routines";
-require('dotenv').config();
+import 'dotenv/config';
 
 const ROUTINE_PORT = process.env.ROUTINES_PORT || 3001;
 const BASE_URL = `http://localhost:${ROUTINE_PORT}/api/cuidador/rutinas-aptas?userId=`;
