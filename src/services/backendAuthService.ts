@@ -1,6 +1,6 @@
 import { backendAuthRegisterBasic, backendAuthRegisterBasicResponse, backendAuthRegisterBasicResponseSchema, backendAuthRegisterBasicSchema, getProfileResponse } from "@/models/backendAuth";
 import axios from "axios";
-require('dotenv').config();
+import 'dotenv/config';
 
 const AUTH_PORT = process.env.AUTH_PORT || '3006';
 const BASE_URL = `http://localhost:${AUTH_PORT}/api/auth/register-basic`;
