@@ -1,6 +1,6 @@
 import axios from "axios";
 import { healthInfo, healthInfoSchema, userHealthResponse } from "@/models/userHealth";
-require('dotenv').config();
+import 'dotenv/config';
 
 const HEALTH_PORT = process.env.AUTH_PORT || '3006';
 const BASE_URL = `http://localhost:${HEALTH_PORT}/api/health/user/`; // + userId
