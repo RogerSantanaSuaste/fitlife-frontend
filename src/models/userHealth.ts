@@ -1,8 +1,9 @@
 import { z } from "zod";
+import { allergiesHealthUserInfoSchema, conditionsHealthUserInfoSchema } from "./allergies";
 
 export interface healthInfo {
     pesokg: number;
-    estaturacm: number;
+    estaturaCm: number;
     nivel: string | "BAJO" | "INTERMEDIO" | "AVANZADO";
     alergias: string[];
     condiciones: string[];
@@ -21,3 +22,16 @@ export type HealthInfo = z.infer<typeof healthInfoSchema>;
 export interface userHealthResponse {
     profile_completed: boolean;
 }
+
+export const healthUserResponseSchema = z.object({
+    userId: z.string(),
+    pesoKg: z.number(),
+    estaturaCm: z.number(),
+    nivel: z.enum(["BAJO", "INTERMEDIO", "AVANZADO"]),
+    imc: z.number().optional(),
+    categoria_imc: z.string().optional(),
+    alergias: z.array(allergiesHealthUserInfoSchema),
+    condiciones: z.array(conditionsHealthUserInfoSchema),
+});
+
+export type HealthUserResponse = z.infer<typeof healthUserResponseSchema>;

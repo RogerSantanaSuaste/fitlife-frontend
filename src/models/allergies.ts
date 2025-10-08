@@ -27,3 +27,16 @@ export const conditionSchema = z.object({
     name: z.string(),
     description: z.string().optional(),
 });
+
+export const allergiesHealthUserInfoSchema = z.object({
+    slug: z.string(),
+    nombre: z.string(),
+})
+
+export type AllergiesHealthUserInfo = z.infer<typeof allergiesHealthUserInfoSchema>;
+
+export const conditionsHealthUserInfoSchema = z.object({
+    slug: z.string(),
+    nombre: z.string(),
+})
+export type ConditionsHealthUserInfo = z.infer<typeof conditionsHealthUserInfoSchema>;
