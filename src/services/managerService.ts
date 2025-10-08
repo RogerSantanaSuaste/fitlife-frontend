@@ -1,6 +1,6 @@
 import axios from "axios";
 import { postAssignRoutineResponseSchema, PostAssignRoutine, PostAsssignRoutineResponse, postAssignRoutineSchema, AssignedRoutinesResponse, AssignedRoutinesResponseSchema } from "@/models/routineManager";
-require('dotenv').config();
+import 'dotenv/config';
 
 const MANAGER_PORT = process.env.MANAGER_PORT || '3002';
 const BASE_URL = `http://localhost:${MANAGER_PORT}/api/manager/`; // + /user/
