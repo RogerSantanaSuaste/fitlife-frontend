@@ -1,0 +1,196 @@
+/* Usa el mismo offset que tu dashboard */
+.app-content{
+  margin-left: 10rem;           /* ajusta a tu sidebar */
+  margin-top: 0.5rem;             /* debajo del header */
+  background: var(--app-bg);
+  min-height: 100vh;
+}
+@media (max-width:768px){ .app-content{ margin-left:0; } }
+
+.content-wrap{
+  width:min(1100px, 100%);
+  margin-inline:auto;
+}
+
+/* ====== Encabezado ====== */
+.section-head{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; margin-bottom:14px;
+}
+.section-title{
+  margin:0; font-size: clamp(22px, 2.2vw, 32px); font-weight:800; color:var(--text-strong);
+}
+.section-tools{ display:flex; gap:10px; align-items:center; }
+
+.select-wrap{
+  position:relative;
+  border:1px solid var(--border); border-radius:12px; background:#fff;
+  padding:0 10px; height:42px; display:flex; align-items:center;
+}
+.select{
+  border:none; background:transparent; outline:none; color:var(--text-strong);
+  font-weight:600; padding-right:8px; cursor:pointer;
+}
+
+/* ====== Lista ====== */
+.routine-list{
+  list-style:none; margin:0; padding:0;
+  display:grid; gap:12px;
+}
+
+/* Fila */
+.routine{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:16px 16px 16px 20px;
+  border:1px solid var(--border);
+  border-radius:16px; background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: border-color .2s ease, transform .12s ease, box-shadow .2s ease;
+}
+.routine:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--primary) 24%, var(--border));
+  box-shadow: 0 10px 24px rgba(2,6,23,.08);
+}
+
+.routine-main{ min-width:0; }
+.routine-title{
+  font-weight:800; color:var(--text-strong); margin-bottom:4px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.routine-meta{
+  display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:14px;
+}
+.badge{
+  padding:5px 10px; border-radius:999px; color:#fff; font-weight:700; font-size:12px;
+  background: linear-gradient(180deg, var(--primary), var(--primary-d));
+}
+.dot{ width:6px; height:6px; border-radius:50%; background: var(--border); display:inline-block; }
+
+/* Acciones (estrella + eliminar) */
+.routine-actions{ display:flex; align-items:center; gap:8px; }
+
+/* checkbox oculto */
+.fav{ position:absolute; opacity:0; pointer-events:none; }
+
+/* botón estrella */
+.icon-like{
+  width:36px; height:36px; border-radius:50%;
+  border:1px solid var(--border);
+  background:#fff; color: var(--text-muted);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.icon-like:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+  box-shadow: var(--shadow);
+}
+/* activo */
+.fav:checked + .icon-like{
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color:#fff; border-color: transparent;
+  box-shadow: 0 10px 22px rgba(15,126,197,.22);
+}
+
+/* botón eliminar */
+.icon-btn{
+  width:36px; height:36px; border-radius:50%;
+  border:1px solid var(--border); background:#fff; color:var(--text-strong);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.icon-btn:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--accent) 26%, var(--border));
+  box-shadow: var(--shadow);
+  background: color-mix(in oklab, #fff 92%, var(--accent));
+}
+
+/* ====== Botón primario ====== */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 16px; border-radius:999px; border:1px solid transparent;
+  font-weight:700; cursor:pointer; transition: transform .12s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn:active{ transform: translateY(1px); }
+.btn--primary{
+  background: linear-gradient(180deg, var(--primary), var(--primary-d));
+  color:#fff; box-shadow: 0 8px 20px rgba(15,126,197,.25);
+}
+
+/* Responsive */
+@media (max-width:640px){
+  .section-head{ flex-direction:column; align-items:flex-start; gap:12px; }
+  .section-tools{ width:100%; justify-content:space-between; }
+}
+/* estado base del corazón: solo contorno */
+.icon-like svg .heart-fill{ display:none; }
+.icon-like svg .heart-line{ display:block; }
+
+/* activo: relleno + latido */
+.fav:checked + .icon-like{
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color:#fff; border-color:transparent;
+  box-shadow: 0 10px 22px rgba(15,126,197,.22);
+}
+.fav:checked + .icon-like svg .heart-line{ display:none; }
+.fav:checked + .icon-like svg .heart-fill{ display:block; }
+
+.fav:checked + .icon-like svg{ animation: beat .35s ease; }
+@keyframes beat{ 0%{transform:scale(1)} 50%{transform:scale(1.14)} 100%{transform:scale(1)} }
+/* Danger tokens para hover de borrar (con fallback) */
+:root{ --danger:#ef4444; --danger-d:#dc2626; }
+
+/* buscador mini */
+.search-mini{
+  position:relative; display:flex; align-items:center; gap:6px;
+  border:1px solid var(--border); background:#fff; border-radius:999px;
+  height:40px; padding:0 12px;
+}
+.search-mini input{
+  border:none; outline:none; background:transparent; width:180px;
+  color:var(--text-strong); font-weight:600;
+}
+.search-mini svg{ opacity:.65; }
+
+/* corazón (igual que dashboard) */
+.fav{ position:absolute; opacity:0; pointer-events:none; }
+.icon-like{
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+  background:#fff; color: var(--text-muted);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.icon-like:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+  box-shadow: var(--shadow);
+}
+.icon-like svg .heart-fill{ display:none; }
+.icon-like svg .heart-line{ display:block; }
+.fav:checked + .icon-like{
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color:#fff; border-color:transparent;
+  box-shadow: 0 10px 22px rgba(15,126,197,.22);
+}
+.fav:checked + .icon-like svg .heart-line{ display:none; }
+.fav:checked + .icon-like svg .heart-fill{ display:block; }
+.fav:checked + .icon-like svg{ animation: beat .35s ease; }
+@keyframes beat{ 0%{transform:scale(1)} 50%{transform:scale(1.14)} 100%{transform:scale(1)} }
+
+/* botón eliminar con estética */
+.icon-delete{
+  width:36px; height:36px; border-radius:50%;
+  border:1px solid var(--border);
+  background:#fff; color: var(--text-strong);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease, color .2s ease;
+}
+.icon-delete:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--danger) 40%, var(--border));
+  background: color-mix(in oklab, #fff 92%, var(--danger));
+  color: var(--danger-d);
+  box-shadow: var(--shadow);
+}

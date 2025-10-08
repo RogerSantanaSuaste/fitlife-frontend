@@ -1,0 +1,198 @@
+/* =========================
+   LOGIN (global CSS)
+   ========================= */
+
+/* Página base */
+.login-page{
+  margin:0;
+  padding:0;
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+  color:#E2E8F0; /* legible sobre el fondo oscuro */
+
+  /* Fondo dark + halos marca (azul + verde) */
+  background:
+    radial-gradient(900px 480px at 85% -10%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 60%),
+    radial-gradient(1200px 600px at 10% 110%, color-mix(in oklab, var(--accent) 12%, transparent), transparent 60%),
+    linear-gradient(135deg, color-mix(in oklab, var(--primary) 14%, var(--sidebar-bg)) 0%, var(--sidebar-bg) 100%);
+}
+
+/* ---------- Formas decorativas ---------- */
+
+
+.shape{
+  position:absolute;
+  background: linear-gradient(180deg,
+              color-mix(in oklab, var(--primary) 30%, var(--sidebar-bg)),
+              color-mix(in oklab, var(--accent) 28%, var(--sidebar-bg)));
+  opacity:.28;
+  border-radius:30% 70% 70% 30% / 30% 30% 70% 70%;
+  animation:morphFloat 20s infinite ease-in-out;
+
+  /* Estado inicial (antes del mount) */
+  filter: blur(0);
+  transform: translate(0, 0) rotate(0deg);
+  transition: opacity .6s cubic-bezier(.4,0,.2,1),
+              filter .6s cubic-bezier(.4,0,.2,1),
+              transform .6s cubic-bezier(.4,0,.2,1);
+}
+.shape-1{ width:500px; height:500px; top:-150px; left:-150px; animation-delay:0s; }
+.shape-2{ width:400px; height:400px; bottom:-100px; left:15%;  animation-delay:5s; }
+.shape-3{ width:600px; height:600px; top:40%;  right:-200px; animation-delay:10s; }
+.shape-4{ width:350px; height:350px; top:10%;  right:20%;  animation-delay:15s; opacity:.38; }
+
+/* Al montar, React agrega .enter */
+.enter{
+  opacity:.9 !important;
+  transform: translateY(-6px) scale(1.02) !important;
+}
+
+@keyframes morphFloat{
+  0%,100%{ transform:translate(0,0) rotate(0deg); border-radius:30% 70% 70% 30% / 30% 30% 70% 70%; }
+  25%{ transform:translate(30px,-30px) rotate(90deg); border-radius:70% 30% 30% 70% / 70% 70% 30% 30%; }
+  50%{ transform:translate(-20px,20px) rotate(180deg); border-radius:50%/50%; }
+  75%{ transform:translate(20px,30px) rotate(270deg); border-radius:30% 70% 30% 70% / 30% 70% 30% 70%; }
+}
+
+/* ---------- Contenedor principal ---------- */
+.login-container{
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  position:relative; z-index:10;
+}
+
+/* ---------- Tarjeta ---------- */
+.login-card{
+  width:100%; max-width:440px;
+  padding:48px 40px;
+  background: var(--surface);
+  color: var(--text-strong);
+  border:1px solid var(--border);
+  border-radius:20px;
+  box-shadow: var(--shadow);
+  position:relative; z-index:10;
+
+  /* Entrada suave */
+  opacity:0; transform: translateY(30px);
+  transition: all .6s cubic-bezier(.4,0,.2,1);
+}
+.login-card.enter{ opacity:1; transform: translateY(0); }
+
+/* ---------- Título y subtítulo ---------- */
+.login-title{
+  margin:0 0 12px; text-align:center;
+  font-size:28px; font-weight:700; letter-spacing:-.5px;
+  color: var(--text-strong);
+}
+.login-subtitle{
+  margin:0 0 36px; text-align:center;
+  font-size:14px; line-height:1.6;
+  color: var(--text-muted);
+}
+
+/* ---------- Formulario ---------- */
+.login-form{ width:100%; }
+.form-group{ margin-bottom:24px; }
+
+.form-label{
+  display:block; margin-bottom:8px;
+  font-size:14px; font-weight:600;
+  color: var(--primary);
+}
+
+.form-input{
+  width:100%; box-sizing:border-box;
+  padding:14px 16px; border-radius:10px; font-size:15px; font-family:inherit;
+  border:2px solid var(--border);
+  color: var(--text-strong);
+  background: var(--app-bg);
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+}
+.form-input::placeholder{ color: color-mix(in oklab, var(--text-muted) 86%, #fff); }
+.form-input:focus{
+  outline:none;
+  background:#fff;
+  border-color: var(--primary);
+  /* Focus ring azul + guiño verde */
+  box-shadow:
+    0 0 0 2px rgba(15,126,197,.75),
+    0 0 0 3px color-mix(in oklab, var(--accent) 22%, transparent);
+  transform: translateY(-2px);
+}
+
+/* ---------- Recordarme ---------- */
+.form-checkbox{ display:flex; align-items:center; margin-bottom:28px; justify-content:space-between; }
+.checkbox-input{
+  width:18px; height:18px; margin:0 10px 0 0; cursor:pointer;
+  accent-color: var(--accent);
+}
+.checkbox-label{ margin:0; font-size:14px; color: var(--text-strong); cursor:pointer; user-select:none; }
+
+/* ---------- Botón ---------- */
+.login-button{
+  width:100%; padding:16px;
+  border:none; border-radius:10px; font-family:inherit;
+  font-size:16px; font-weight:700; color:#fff; cursor:pointer;
+  background: linear-gradient(180deg, var(--primary), var(--primary-d));
+  /* sombra azul con guiño verde sutil */
+  box-shadow: 0 12px 30px color-mix(in oklab, var(--primary) 20%, black);
+  position:relative; overflow:hidden;
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  margin-bottom:20px;
+}
+.login-button::before{
+  content:""; position:absolute; top:50%; left:50%;
+  width:0; height:0; border-radius:50%;
+  background: rgba(255,255,255,.18);
+  transform: translate(-50%,-50%);
+  transition: width .6s ease, height .6s ease;
+}
+.login-button:hover::before{ width:400px; height:400px; }
+.login-button:hover{
+  filter: brightness(1.05);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px color-mix(in oklab, var(--primary) 34%, black);
+}
+.login-button:active{ transform: translateY(-1px); }
+.login-button[disabled]{ opacity:.7; cursor:not-allowed; }
+
+/* ---------- Enlace crear cuenta ---------- */
+.signup-link{ margin:0; text-align:center; font-size:14px; color: var(--text-muted); }
+.signup-link-text{
+  margin-left:4px;
+  color: var(--text-strong); font-weight:700; text-decoration:none;
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+.signup-link-text:hover{ color: var(--accent); text-decoration: underline; }
+
+/* ---------- Responsive ---------- */
+@media (max-width:480px){
+  .login-card{ padding:36px 28px; border-radius:16px; }
+  .login-title{ font-size:24px; }
+  .login-subtitle{ font-size:13px; }
+  .shape{ opacity:.5; }
+}
+@media (max-width:360px){
+  .login-card{ padding:28px 20px; }
+  .form-input{ padding:12px 14px; font-size:14px; }
+  .login-button{ padding:14px; font-size:15px; }
+}
+/* Asegura jerarquía de capas correcta */
+.login-page{ position: relative; isolation: isolate; }   /* crea un stacking context propio */
+
+.background-shapes{
+  position: absolute; inset: 0;
+  z-index: 0;                     /* SIEMPRE debajo del contenido */
+  pointer-events: none;           /* no tapa clics */
+}
+
+.shape{ filter: blur(10px); }     /* el blur sólo en las shapes, no en el contenido */
+
+.login-container{ position: relative; z-index: 1; }  /* por encima de las shapes */
+.login-card{ position: relative; z-index: 2; background: #fff; } /* card opaca, on top */
+
+/* Si el fondo sigue “invadiendo”, baja intensidad: */
+.shape-1, .shape-2, .shape-3, .shape-4 { opacity: .18; }
