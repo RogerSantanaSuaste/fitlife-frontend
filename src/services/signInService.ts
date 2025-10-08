@@ -1,6 +1,6 @@
 import axios from "axios";
 import { userSignIn, userSignInResponse, userSignInSchema, UserSignInInput } from "@/models/userSignIn";
-require('dotenv').config();
+import 'dotenv/config';
 
 const API_KEY = process.env.FIREBASE_WEB_API_KEY;
 const BASE_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
