@@ -1,0 +1,202 @@
+/* Ajusta estos tokens a tu layout real */
+
+
+/* Área de contenido (ocupa el hueco a la derecha del sidebar y debajo del header) */
+.app-content{
+ margin-left: 10rem;
+ margin-top: 1rem;
+  background: var(--app-bg);
+  min-height: 100vh;
+}
+@media (max-width: 768px){
+  .app-content{ margin-left: 0; padding-top: 16px; }
+}
+
+/* ancho máximo y centrado del contenido */
+.content-wrap{
+  width: min(1200px, 100%);
+  margin-inline: auto;
+}
+
+/* HERO */
+.hero{
+  margin-bottom: 16px;
+  padding: 24px;
+  display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; align-items: center;
+  border: 1px solid var(--border); border-radius: 16px;
+  background:
+    radial-gradient(900px 420px at 90% -20%, color-mix(in oklab, var(--primary) 10%, transparent), transparent 60%),
+    color-mix(in oklab, var(--surface) 96%, transparent);
+}
+.hero__copy h1{
+  margin:0 0 6px; font-size: clamp(22px, 2.8vw, 36px); line-height: 1.1; font-weight: 800; color: var(--text-strong);
+}
+.hero__copy h1 span{
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero__copy p{ margin:0 0 12px; color: var(--text-muted); }
+.hero__art{
+  height: 160px; border-radius: 12px; opacity:.5;
+  background:
+    linear-gradient(120deg, rgba(143,209,39,.15), rgba(15,126,197,.18)),
+    repeating-radial-gradient(circle at 40% 40%, rgba(0,0,0,.06) 0 6px, transparent 6px 12px);
+}
+
+/* TABS */
+.tabs{ display:flex; gap:8px; margin: 8px 0 14px; }
+.tab{
+  padding:10px 14px; border:1px solid var(--border); border-radius: 999px;
+  background:#fff; color: var(--text-strong); cursor:pointer; font-weight:700;
+  transition: background .2s ease, border-color .2s ease, transform .12s ease;
+}
+.tab:hover{ transform: translateY(-1px); }
+.tab.is-active{
+  background: linear-gradient(180deg, var(--primary), var(--primary-d));
+  color:#fff; border-color: transparent; box-shadow: 0 8px 20px rgba(15,126,197,.25);
+}
+
+/* CARDS */
+.cards{
+  display:none;
+  display: none;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.cards.is-visible{
+  display:grid;
+  padding-bottom: 12px;
+}
+.card{
+  border:1px solid var(--border);
+  border-radius:18px; background: var(--surface); padding: 18px;
+  box-shadow: var(--shadow);
+  display:flex; flex-direction:column; gap:12px;
+}
+.card__head{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.card__title{ margin:0; font-size:18px; font-weight:800; }
+.card__text{ margin:0; color: var(--text-muted); }
+
+.icon-like{
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+  background:#fff; display:grid; place-items:center; cursor:pointer; color: var(--text-strong);
+  transition: transform .12s ease, border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.icon-like:hover{ transform: translateY(-1px); border-color: color-mix(in oklab, var(--primary) 28%, var(--border)); box-shadow: var(--shadow); }
+.icon-like.is-on{ background: linear-gradient(135deg, var(--accent), var(--primary)); color:#fff; border-color: transparent; }
+
+.meta{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.badge{
+  padding:6px 10px; border-radius: 999px; font-weight:700; font-size:12px; color:#fff;
+  background: linear-gradient(180deg, var(--primary), var(--primary-d));
+}
+.rating{ letter-spacing:1px; color:#111827; }
+
+.chips{ display:flex; gap:6px; flex-wrap:wrap; }
+.chip{
+  border:1px solid var(--border); background:#fff; color: var(--text-strong);
+  border-radius:999px; padding:6px 10px; font-size:12px; font-weight:700;
+}
+/* === CARDS: 3 por fila === */
+.cards{
+  /* quita los display:none duplicados */
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(280px, 1fr)); /* ⬅️ 3 columnas */
+}
+
+.cards.is-visible{ display: grid; }
+
+/* Responsivo: 2 columnas en tablets, 1 en móvil */
+@media (max-width: 1200px){
+  .cards{ grid-template-columns: repeat(2, minmax(280px, 1fr)); }
+}
+@media (max-width: 680px){
+  .cards{ grid-template-columns: 1fr; }
+}
+
+/* (opcional) evita desbordes por contenido largo */
+.card{ min-width: 0; }
+
+/* BOTONES */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 16px; border-radius:999px; border:1px solid transparent;
+  font-weight:700; cursor:pointer;
+  transition: transform .12s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+}
+.btn:active{ transform: translateY(1px); }
+.btn--primary{
+  background: linear-gradient(180deg, var(--primary), var(--primary-d));
+  color:#fff; box-shadow: 0 8px 20px rgba(15,126,197,.25);
+}
+.btn--ghost{
+  background:#fff; color: var(--text-strong); border-color: var(--border);
+}
+.btn--ghost:hover{ border-color: color-mix(in oklab, var(--primary) 28%, var(--border)); box-shadow: var(--shadow); }
+
+/* Responsive */
+@media (max-width: 1024px){
+  .hero{ grid-template-columns: 1fr; }
+}
+/* Mostrar/ocultar secciones según el radio */
+#tabRut:checked ~ #tab-rutinas { display: grid; }
+#tabRut:checked ~ #tab-comidas { display: none; }
+
+#tabCom:checked ~ #tab-rutinas { display: none; }
+#tabCom:checked ~ #tab-comidas { display: grid; }
+
+/* Estilo "activo" al label de la pestaña seleccionada */
+#tabRut:checked ~ .tabs label[for="tabRut"],
+#tabCom:checked ~ .tabs label[for="tabCom"]{
+  background: linear-gradient(180deg, var(--primary), var(--primary-d));
+  color:#fff; border-color: transparent; box-shadow: 0 8px 20px rgba(15,126,197,.25);
+}
+
+/* Asegura que cards tenga display:grid por defecto (tu versión 3-col) */
+.cards{ display:grid; gap:18px; grid-template-columns:repeat(3, minmax(280px,1fr)); }
+
+/* Oculta el checkbox, usamos el label como botón */
+.fav{ position:absolute; opacity:0; pointer-events:none; }
+
+/* Botón corazón (estado base ya lo tienes) */
+.icon-like{
+  width:36px; height:36px; border-radius:50%;
+  border:1px solid var(--border);
+  background:#fff; color: var(--text-strong);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.icon-like:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+  box-shadow: var(--shadow);
+}
+
+/* ✅ ESTADO ACTIVO (checkbox marcado) */
+.fav:checked + .icon-like{
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color:#fff;
+  border-color: transparent;
+  box-shadow: 0 10px 22px rgba(15,126,197,.22);
+}
+
+/* (opcional) pequeño “latido” al activar */
+.fav:checked + .icon-like svg{ animation: beat .35s ease; }
+@keyframes beat{
+  0%{ transform: scale(1); }
+  50%{ transform: scale(1.14); }
+  100%{ transform: scale(1); }
+}
+ .top-bar{
+    background:var(--surface);
+    padding:12px 24px;
+    display:flex; align-items:center; gap:24px;
+    border-bottom:1px solid var(--border);
+    animation:slideDown .5s cubic-bezier(.22,1,.36,1);
+    box-shadow:var(--shadow);
+  }
+  @keyframes slideDown{
+    from{ transform:translateY(-16px); opacity:0;}
+    to  { transform:translateY(0);     opacity:1;}
+  }
