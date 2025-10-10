@@ -5,6 +5,22 @@ import Link from "next/link";
 
 export default function Header() {
   const [open, setOpen] = useState(true); // mostrar/ocultar sidebar (móvil)
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  useState(() => {
+    const session = localStorage.getItem("userSession");
+    if (session) {
+      try {
+        const user = JSON.parse(session);
+        setFirstName(user.firstName || "");
+        setLastName(user.lastName || "");
+      } catch (error: any) {
+        console.error("Error parsing user session:", error.message);
+        alert(`Error al obtener la sesión del usuario: ${error.message}`);
+       }
+    }
+  });
 
   return (
     <>
@@ -43,7 +59,7 @@ export default function Header() {
           onClick={() => setOpen(v => !v)}
         >
           <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
           </svg>
         </button>
 
@@ -65,7 +81,7 @@ export default function Header() {
             </svg>
           </div>
           <div className="user-info">
-            <div className="user-name">Diego</div>
+            <div className="user-name">{firstName} {lastName}</div>
             <div className="user-role">Usuario</div>
           </div>
         </div>

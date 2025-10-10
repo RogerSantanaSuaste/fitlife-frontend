@@ -1,11 +1,11 @@
 import axios from "axios";
-import { healthInfo, healthInfoSchema, userHealthResponse } from "@/models/userHealth";
+import { HealthInfo, healthInfoSchema, userHealthResponse } from "@/models/userHealth";
 import 'dotenv/config';
 
 const HEALTH_PORT = process.env.AUTH_PORT || '3006';
-const BASE_URL = `http://localhost:${HEALTH_PORT}/api/health/user/`; // + userId
+const BASE_URL = `http://localhost:${HEALTH_PORT}/api/health/public/user/`; // + userId
 
-export const sendHealthInfo = async (userId: string, healthData: healthInfo, idToken: string): Promise<userHealthResponse> => {
+export const sendHealthInfo = async (userId: string, healthData: HealthInfo): Promise<userHealthResponse> => {
     try {
         // Validate input data
         healthInfoSchema.parse(healthData);
@@ -13,11 +13,6 @@ export const sendHealthInfo = async (userId: string, healthData: healthInfo, idT
         const response = await axios.post<userHealthResponse>(
             `${BASE_URL}${userId}`,
             healthData,
-            {
-                headers: {
-                    Authorization: `Bearer ${idToken}`,
-                },
-            }
         );
         return response.data;
     } catch (error: any) {

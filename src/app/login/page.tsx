@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
+import { LogInSchema, LogInInput } from "@/models/userLogin";
+import { LogInController } from "@/controllers/logInController";
 
 export default function LoginPage() {
   const [mounted, setMounted] = useState(false);
@@ -17,9 +18,25 @@ export default function LoginPage() {
     setLoading(true);
 
     // Simula login (cámbialo por tu lógica real)
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 1500);
+    const data = new FormData(e.currentTarget);
+    const payload: LogInInput = {
+      email: String(data.get("email") || ""),
+      password: String(data.get("password") || ""),
+      returnSecureToken: true,
+    };
+    LogInController.LogIn(payload)
+      .then((response) => {
+        console.log("Login successful:", response);
+        // Redirige a /questionnaire para continuar obteniendo los datos de salud del usuario.
+        window.location.href = "/questionnaire";
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        alert(`Error en el inicio de sesión: ${error.message}`);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -48,6 +65,7 @@ export default function LoginPage() {
               <input
                 type="email"
                 id="email"
+                name="email"
                 className="form-input"
                 placeholder="diegoboston@gmail.com"
                 required
@@ -61,6 +79,7 @@ export default function LoginPage() {
               <input
                 type="password"
                 id="password"
+                name="password"
                 className="form-input"
                 placeholder="••••••"
                 required
@@ -78,7 +97,6 @@ export default function LoginPage() {
               type="submit"
               className="login-button"
               disabled={loading}
-              aria-busy={loading}
             >
               {loading ? "Iniciando..." : "Iniciar Sesión"}
             </button>

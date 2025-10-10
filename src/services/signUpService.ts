@@ -1,23 +1,26 @@
 import axios from "axios";
-import { userSignIn, userSignInResponse, userSignInSchema, UserSignInInput } from "@/models/userSignIn";
+import { signUpSchema, SignUpInput, userSignUpResponse } from "@/models/userSignUp";
 import 'dotenv/config';
 
-const API_KEY = process.env.FIREBASE_WEB_API_KEY;
-const BASE_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
+const AUTH_PORT = process.env.AUTH_PORT || '3006';
+const BASE_URL = `http://localhost:${AUTH_PORT}/api/auth/register`;
 
-export const signInUser = async (userData: UserSignInInput): Promise<userSignInResponse> => {
+export const registerUser = async (userData: SignUpInput): Promise<userSignUpResponse> => {
     /* Example of userData
     {
       "email": "email@example.com",
-        "password": "password123",
-        "returnSecureToken": true
+      "password": "password123",
+      "firstName": "John",
+      "lastName": "Doe",
+      "gender": "masculino",
+      "returnSecureToken": true
     }
     */
     try {
         // Validate input data
-        userSignInSchema.parse(userData);
+        signUpSchema.parse(userData);
         // Make the API request
-        const response = await axios.post<userSignInResponse>(BASE_URL, userData);
+        const response = await axios.post<userSignUpResponse>(BASE_URL, userData);
         return response.data;
     } catch (error: any) {
         if (error.response) {
