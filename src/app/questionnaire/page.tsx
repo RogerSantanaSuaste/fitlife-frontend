@@ -2,14 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation"; // ⬅️ para redirigir
-
-type CatalogItem = { id: string; name: string } | string;
-
-function normalize(items: CatalogItem[]): { id: string; name: string }[] {
-  return items.map((it) =>
-    typeof it === "string" ? { id: it, name: it } : { id: it.id, name: it.name }
-  );
-}
+import { healthController } from "@/controllers/healthController";
+import { allergiesConditionsController } from "@/controllers/allergiesConditionsController";
+import { allergiesConditionsResponse } from "@/models/allergiesConditions";
+import { Allergy } from "@/models/allergies";
+import { Conditions } from "@/models/conditions";
 
 export default function CuestionarioPage() {
   const router = useRouter(); // ⬅️
@@ -21,14 +18,10 @@ export default function CuestionarioPage() {
     useState<"BAJO" | "INTERMEDIO" | "AVANZADO">("BAJO");
 
   // catálogos desde BD
-  const [alergiasCat, setAlergiasCat] = useState<{ id: string; name: string }[]>(
-    []
-  );
-  const [condicionesCat, setCondicionesCat] = useState<
-    { id: string; name: string }[]
-  >([]);
-  const [loadingCats, setLoadingCats] = useState(true);
-
+  const [loadingCats, setLoadingCats] = useState(false);
+  const [allergiesConditionsResponse, setAllergiesConditionsResponse] = useState<allergiesConditionsResponse | null>(null);
+  const [allergies, setAllergies] = useState<Allergy[]>([]);
+  const [conditions, setConditions] = useState<Conditions[]>([]);
   // selección
   const [alergiasSel, setAlergiasSel] = useState<string[]>([]);
   const [condSel, setCondSel] = useState<string[]>([]);
@@ -36,33 +29,12 @@ export default function CuestionarioPage() {
   useEffect(() => {
     (async () => {
       try {
-        const [aRes, cRes] = await Promise.all([
-          fetch("/api/catalogs/alergias"),
-          fetch("/api/catalogs/condiciones"),
-        ]);
-        const aJson = aRes.ok ? await aRes.json() : [];
-        const cJson = cRes.ok ? await cRes.json() : [];
-
-        const alergias = normalize(aJson?.items ?? aJson ?? []);
-        const condiciones = normalize(cJson?.items ?? cJson ?? []);
-
-        setAlergiasCat(
-          alergias.length
-            ? alergias
-            : normalize(["Lácteos", "Gluten", "Cacahuate", "Mariscos", "Huevo"])
-        );
-        setCondicionesCat(
-          condiciones.length
-            ? condiciones
-            : normalize(["Asma", "Lesión de rodilla", "Dolor lumbar", "Hipertensión"])
-        );
+        setLoadingCats(true);
+        const cats: allergiesConditionsResponse = await allergiesConditionsController.getAllergiesConditions();
+        setAllergies(cats.allergies);
+        setConditions(cats.conditions);
       } catch {
-        setAlergiasCat(
-          normalize(["Lácteos", "Gluten", "Cacahuate", "Mariscos", "Huevo"])
-        );
-        setCondicionesCat(
-          normalize(["Asma", "Lesión de rodilla", "Dolor lumbar", "Hipertensión"])
-        );
+
       } finally {
         setLoadingCats(false);
       }
@@ -96,16 +68,24 @@ export default function CuestionarioPage() {
       alergias: alergiasSel,
       condiciones: condSel,
     };
+    console.log(payload);
 
-    const res = await fetch("/api/cuestionario", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    if (res.ok) {
-      router.push("/dashboard"); // ⬅️ redirección
+    try {
+      // Llamar al controlador para enviar los datos
+      const session = sessionStorage.getItem("userSession");
+      if (!session) throw new Error("No user session found");
+      const user = JSON.parse(session);
+      const userId = user.userId;
+      if (!userId) throw new Error("User ID not found in session");
+      await healthController.sendHealthInfo(userId, payload);
+      // Redirigir a dashboard
+      alert("¡Datos guardados con éxito!");
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.error("Error sending health info:", error);
+      alert(`Error al enviar la información de salud: ${error.message}`);
     }
+
   };
 
   return (
@@ -222,14 +202,14 @@ export default function CuestionarioPage() {
                 {loadingCats ? (
                   <span className="hint">Cargando alergias…</span>
                 ) : (
-                  alergiasCat.map((a) => (
+                  allergies.map((a) => (
                     <div key={a.id} className="chip-check">
                       <input
                         type="checkbox"
                         id={`al-${a.id}`}
-                        checked={alergiasSel.includes(a.name)}
+                        checked={alergiasSel.includes(a.slug)}
                         onChange={() =>
-                          setAlergiasSel((arr) => toggleArray(arr, a.name))
+                          setAlergiasSel((arr) => toggleArray(arr, a.slug))
                         }
                         hidden
                       />
@@ -249,13 +229,13 @@ export default function CuestionarioPage() {
                 {loadingCats ? (
                   <span className="hint">Cargando condiciones…</span>
                 ) : (
-                  condicionesCat.map((c) => (
+                  conditions.map((c) => (
                     <div key={c.id} className="chip-check">
                       <input
                         type="checkbox"
                         id={`cf-${c.id}`}
-                        checked={condSel.includes(c.name)}
-                        onChange={() => setCondSel((arr) => toggleArray(arr, c.name))}
+                        checked={condSel.includes(c.slug)}
+                        onChange={() => setCondSel((arr) => toggleArray(arr, c.slug))}
                         hidden
                       />
                       <label htmlFor={`cf-${c.id}`} className="chip">

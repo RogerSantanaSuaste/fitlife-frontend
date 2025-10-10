@@ -6,3 +6,5 @@ export const conditionSchema = z.object({
     name: z.string(),
     description: z.string().optional(),
 })
+
+export type Conditions = z.infer<typeof conditionSchema>;

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { registrationController } from "@/controllers/registrationController";
+import { registrationController } from "@/controllers/signUpController";
 
 export default function RegistroPage() {
   const [mounted, setMounted] = useState(false);

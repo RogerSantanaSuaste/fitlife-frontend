@@ -3,9 +3,9 @@ import { Routine, routineSchema } from "@/models/routines";
 import 'dotenv/config';
 
 const ROUTINE_PORT = process.env.ROUTINES_PORT || 3001;
-const BASE_URL = `http://localhost:${ROUTINE_PORT}/api/cuidador/rutinas-aptas?userId=`;
 
 export const getRoutineService = async (userId: string): Promise<Routine[]> => {
+    const BASE_URL = `http://localhost:${ROUTINE_PORT}/api/cuidador/rutinas-aptas?userId=`;
     try {
         const response = await axios.get<Routine[]>(`${BASE_URL}${userId}`);
         // Validate response data
@@ -24,3 +24,4 @@ export const getRoutineService = async (userId: string): Promise<Routine[]> => {
         }
     }
 }
+

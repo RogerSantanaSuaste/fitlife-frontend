@@ -36,7 +36,7 @@ export const assignRoutineToUserService = async (userId: string, routineId: stri
     }
 }
 
-export const assignedRoutinesService = async (userId: string): Promise<AssignedRoutinesResponse[]> => {
+export const getAssignedRoutinesService = async (userId: string): Promise<AssignedRoutinesResponse[]> => {
     try {
         const response = await axios.get<AssignedRoutinesResponse[]>(`${BASE_URL}user/${userId}/details`)
         // Validate response data
@@ -56,7 +56,7 @@ export const assignedRoutinesService = async (userId: string): Promise<AssignedR
     }
 }
 
-export const unassignedRoutineService = async (userId: string, routineId: string) => {
+export const unassignRoutineService = async (userId: string, routineId: string) => {
     try {
         const response = await axios.delete(`${BASE_URL}user/${userId}/routine/${routineId}`);
         if (response.status === 204) {
