@@ -112,6 +112,7 @@
   display:inline-flex; align-items:center; justify-content:center;
   padding:10px 16px; border-radius:999px; border:1px solid transparent;
   font-weight:700; cursor:pointer; transition: transform .12s ease, box-shadow .2s ease, filter .2s ease;
+  text-decoration: none;
 }
 .btn:active{ transform: translateY(1px); }
 .btn--primary{
@@ -194,3 +195,8 @@
   color: var(--danger-d);
   box-shadow: var(--shadow);
 }
+.btn--pill { border-radius: 999px; }
+.btn--with-icon svg { transition: transform .2s ease; }
+.btn--with-icon:hover svg { transform: translateX(3px); }
+
+.routine-actions { display: inline-flex; align-items: center; gap: 10px; }
