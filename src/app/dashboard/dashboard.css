@@ -200,3 +200,51 @@
     from{ transform:translateY(-16px); opacity:0;}
     to  { transform:translateY(0);     opacity:1;}
   }
+  /* — botón como link — */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+  line-height: 1; /* evita saltos en <a> */
+  text-decoration: none; /* 👈 importante para <a> */
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn--pill { border-radius: 999px; }
+
+.btn--ghost {
+  background: #fff;
+  color: var(--text-strong);
+  border-color: var(--border);
+}
+.btn--ghost:hover {
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+  box-shadow: var(--shadow);
+}
+.btn--ghost:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+/* iconito con micro-animación */
+.btn--with-icon svg {
+  transition: transform .2s ease;
+}
+.btn--with-icon:hover svg {
+  transform: translateX(3px);
+}
+
+/* estado deshabilitado por si lo usas algún día */
+.btn[aria-disabled="true"],
+.btn:disabled {
+  opacity: .6;
+  pointer-events: none;
+}

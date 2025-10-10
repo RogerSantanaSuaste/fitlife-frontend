@@ -18,7 +18,7 @@ export default function Header() {
         <nav className="nav-menu">
           <Link href="/dashboard" className="nav-item">Inicio</Link>
           <Link href="/workout-u" className="nav-item">Mis Rutinas</Link>
-          <Link href="/" className="nav-item">Mis Estadísticas</Link>
+          <Link href="#" className="nav-item">Mis Estadísticas</Link>
           <Link href="/reminder" className="nav-item">Recordatorios</Link>
           <Link href="/health-data" className="nav-item">Datos Salud</Link>
         </nav>

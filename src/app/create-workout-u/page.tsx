@@ -43,18 +43,19 @@ export default function CreateWorkoutUPage() {
                 <input className="form-input" placeholder="Ej. Full Body Express" />
               </div>
 
-              
 
+              {/* Duración (placeholder) 
               <div className="form-group">
                 <label className="form-label">Duración</label>
                 <div className="unit-input">
                   <input className="form-input" type="number" min={5} max={180} step={5} placeholder="25" />
                   <span className="unit">min</span>
                 </div>
-              </div>
+              </div>*/}
             </div>
 
             <div className="divider" />
+            {/* Nivel (placeholder) 
             <div className="form-group">
                 <label className="form-label">Nivel</label>
                 <div className="segmented" role="tablist" aria-label="Nivel">
@@ -72,6 +73,7 @@ export default function CreateWorkoutUPage() {
                   </span>
                 </div>
               </div>
+              */}
 
             <h3 className="card__title" style={{ marginTop: 10 }}>Ejercicios seleccionados</h3>
             <ul className="selected-list">

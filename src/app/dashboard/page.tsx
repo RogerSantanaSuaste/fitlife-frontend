@@ -1,4 +1,37 @@
+import Link from "next/link";
+
 export default function DashboardPage() {
+  // Datos de ejemplo (cámbialos por los reales)
+  const rutinas: {
+    id: string;
+    nombre: string;
+    dias: string[];
+    ejercicios: unknown[]; // snapshots
+    alimentos: unknown[];  // snapshots
+  }[] = [
+      {
+        id: "r-001",
+        nombre: "Mi rutina de fuerza",
+        dias: ["lunes", "miercoles", "viernes"],
+        ejercicios: [{}, {}, {}, {}],
+        alimentos: [{}, {}],
+      },
+      {
+        id: "r-002",
+        nombre: "Cardio ligero",
+        dias: ["martes", "jueves"],
+        ejercicios: [{}, {}, {}],
+        alimentos: [{}],
+      },
+      {
+        id: "r-003",
+        nombre: "Movilidad & Core",
+        dias: ["sabado"],
+        ejercicios: [{}, {}, {}, {}, {}],
+        alimentos: [{}],
+      },
+    ];
+
   return (
     <main className="app-content">
       <div className="content-wrap">
@@ -14,127 +47,54 @@ export default function DashboardPage() {
           <div className="hero__art" aria-hidden />
         </section>
 
-        {/* TABS (radios CSS) */}
+        {/* Tabs (solo rutinas) */}
         <input type="radio" id="tabRut" name="tab" defaultChecked hidden />
-        <input type="radio" id="tabCom" name="tab" hidden />
-
         <nav className="tabs">
           <label className="tab" htmlFor="tabRut">Rutinas</label>
-          <label className="tab" htmlFor="tabCom">Comida</label>
         </nav>
 
         {/* LISTA RUTINAS */}
-        <section id="tab-rutinas" className="cards">
-          <article className="card">
-            <header className="card__head">
-              <h3 className="card__title">Full Body Express</h3>
+        <section id="tab-rutinas" className="cards is-visible">
+          {rutinas.map((r) => (
+            <article className="card" key={r.id}>
+              <header className="card__head">
+                <h3 className="card__title">{r.nombre}</h3>
 
-              {/* favorito */}
-              <input type="checkbox" id="fav-r1" className="fav" hidden />
-              <label htmlFor="fav-r1" className="icon-like" aria-label="Favorito">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              </label>
-            </header>
-            <p className="card__text">
-              Trabajo completo del cuerpo en poco tiempo. Perfecta para comenzar el día con energía.
-            </p>
-            <div className="meta">
-              <span className="badge">25 min</span>
-              <span className="rating">Dificultad:★★★★★</span>
-            </div>
-            <div className="actions"><button className="btn btn--ghost">Añadir</button></div>
-          </article>
+                {/* ❤️ favorito visual (CSS-only) */}
+                <input type="checkbox" id={`fav-${r.id}`} className="fav" hidden />
+                <label htmlFor={`fav-${r.id}`} className="icon-like" aria-label="Favorito">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                </label>
+              </header>
 
-          <article className="card">
-            <header className="card__head">
-              <h3 className="card__title">Piernas y Glúteos</h3>
+              <p className="card__text" style={{ marginBottom: 8 }}>
+                {r.ejercicios.length} ejercicios • {r.alimentos.length} comidas
+              </p>
 
-              <input type="checkbox" id="fav-r2" className="fav" hidden />
-              <label htmlFor="fav-r2" className="icon-like" aria-label="Favorito">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              </label>
-            </header>
-            <p className="card__text">
-              Enfoque en tren inferior para ganar fuerza y estabilidad. Sin máquinas.
-            </p>
-            <div className="meta">
-              <span className="badge">35 min</span>
-              <span className="rating">Dificultad:★★★★☆</span>
-            </div>
-            <div className="actions"><button className="btn btn--ghost">Añadir</button></div>
-          </article>
+              <div className="meta">
+                <span className="badge">
+                  {r.dias.length} día{r.dias.length !== 1 ? "s" : ""}
+                </span>
+                <span className="chips" style={{ flexWrap: "wrap" }}>
+                  {r.dias.map((d, i) => (
+                    <span className="chip" key={`${r.id}-d-${i}`} style={{ textTransform: "capitalize" }}>
+                      {d}
+                    </span>
+                  ))}
+                </span>
+              </div>
 
-          <article className="card">
-            <header className="card__head">
-              <h3 className="card__title">Full Body Express</h3>
-
-              <input type="checkbox" id="fav-r3" className="fav" hidden />
-              <label htmlFor="fav-r3" className="icon-like" aria-label="Favorito">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              </label>
-            </header>
-            <p className="card__text">
-              Trabajo completo del cuerpo en poco tiempo. Perfecta para comenzar el día con energía.
-            </p>
-            <div className="meta">
-              <span className="badge">25 min</span>
-              <span className="rating">Dificultad:★★★★★</span>
-            </div>
-            <div className="actions"><button className="btn btn--ghost">Añadir</button></div>
-          </article>
-        </section>
-
-        {/* LISTA COMIDAS */}
-        <section id="tab-comidas" className="cards">
-          <article className="card">
-            <header className="card__head">
-              <h3 className="card__title">Bowl de Pollo y Quinoa</h3>
-
-              <input type="checkbox" id="fav-c1" className="fav" hidden />
-              <label htmlFor="fav-c1" className="icon-like" aria-label="Favorito">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              </label>
-            </header>
-            <p className="card__text">Alto en proteína, bajo en grasas, ideal post-entreno.</p>
-            <div className="meta">
-              <span className="badge">520 kcal</span>
-              <span className="chips">
-                <span className="chip">P 45g</span><span className="chip">C 56g</span>
-                <span className="chip">G 12g</span><span className="chip">20 min</span>
-              </span>
-            </div>
-            <div className="actions"><button className="btn btn--ghost">Añadir</button></div>
-          </article>
-
-          <article className="card">
-            <header className="card__head">
-              <h3 className="card__title">Avena con Frutos Rojos</h3>
-
-              <input type="checkbox" id="fav-c2" className="fav" hidden />
-              <label htmlFor="fav-c2" className="icon-like" aria-label="Favorito">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              </label>
-            </header>
-            <p className="card__text">Carbohidratos complejos y fibra para energía sostenida.</p>
-            <div className="meta">
-              <span className="badge">380 kcal</span>
-              <span className="chips">
-                <span className="chip">P 12g</span><span className="chip">C 62g</span>
-                <span className="chip">G 8g</span><span className="chip">8 min</span>
-              </span>
-            </div>
-            <div className="actions"><button className="btn btn--ghost">Añadir</button></div>
-          </article>
+              <div className="actions">
+                {/* 👉 Redirige a /workout (sin id) */}
+                <Link href="/workout" className="btn btn--ghost btn--pill btn--with-icon" aria-label="Ver rutina">
+                  <span>Ver</span>
+                 
+                </Link>
+              </div>
+            </article>
+          ))}
         </section>
       </div>
     </main>
