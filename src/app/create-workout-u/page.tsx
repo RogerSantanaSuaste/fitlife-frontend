@@ -33,7 +33,8 @@ export default function CreateWorkoutUPage() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const recommendations = await healthController.getRecommendedFoodsAndExercises(userId || "");
+        if (!userId) return;
+        const recommendations = await healthController.getRecommendedFoodsAndExercises(userId);
         setRecommendedFoods(recommendations.alimentos);
         setRecommendedExercises(recommendations.ejercicios);
       } catch (error) {
@@ -106,7 +107,7 @@ export default function CreateWorkoutUPage() {
                           <div>
                             <strong>Contradicciones:</strong>
                             <ul>
-                              {ex.contradicciones.map((c) => (
+                              {ex.contradicciones && ex.contradicciones.map((c) => (
                                 <li key={c}>{c}</li>
                               ))}
                             </ul>
@@ -116,7 +117,7 @@ export default function CreateWorkoutUPage() {
                           <div>
                             <strong>Instrucciones:</strong>
                             <ol>
-                              {ex.instrucciones.map((inst, index) => (
+                              {ex.instrucciones && ex.instrucciones.map((inst, index) => (
                                 <li key={index}>{inst}</li>
                               ))}
                             </ol>
