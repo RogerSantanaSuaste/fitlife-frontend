@@ -64,7 +64,7 @@ export default function AjustesCuestionarioPage() {
     };
 
     try {
-      const session = sessionStorage.getItem("userSession");
+      const session = localStorage.getItem("userSession");
       if (!session) throw new Error("No user session found");
       const user = JSON.parse(session);
       const userId = user.userId;

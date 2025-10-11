@@ -12,7 +12,7 @@ export const sendHealthInfo = async (userId: string, healthData: HealthInfo): Pr
         // Validate input data
         healthInfoSchema.parse(healthData);
         // Make the API request
-        const response = await axios.post<userHealthResponse>(
+        const response = await axios.put<userHealthResponse>(
             `${BASE_URL}${userId}`,
             healthData,
         );
