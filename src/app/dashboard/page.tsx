@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { routinesController } from "@/controllers/routinesController";
 import { routineManagerController } from "@/controllers/routineManagerController";
 import { Routine } from "@/models/routines";
@@ -10,10 +10,10 @@ export default function DashboardPage() {
   const [rutinas, setRutinas] = useState<Routine[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
-
+  const [userId, setUserId] = useState<string | null>();
+  const session = typeof window !== "undefined" ? localStorage.getItem("userSession") : null;
+  
   useEffect(() => {
-    const session = localStorage.getItem("userSession");
     if (session) {
       try {
         const user = JSON.parse(session);
@@ -21,11 +21,11 @@ export default function DashboardPage() {
       } catch (error: any) {
         console.error("Error parsing user session:", error.message);
         alert(`Error al obtener la sesión del usuario: ${error.message}`);
-       }
+      }
     } else {
       console.log("No user session found");
     }
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     const fetchRoutines = async () => {
@@ -122,9 +122,9 @@ export default function DashboardPage() {
                 </Link>
                 {/* Boton para añadir rutina a MIS RUTINASx */}
                 <button className="btn"
-                onClick={() => {
-                  addRoutineToMyRoutines(r.id);
-                }}
+                  onClick={() => {
+                    addRoutineToMyRoutines(r.id);
+                  }}
                 >
                   Añadir a mis rutinas
                 </button>
