@@ -10,31 +10,13 @@ export default function DashboardPage() {
   const [rutinas, setRutinas] = useState<Routine[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>();
   const session = typeof window !== "undefined" ? localStorage.getItem("userSession") : null;
-  
-  useEffect(() => {
-    if (session) {
-      try {
-        const user = JSON.parse(session);
-        setUserId(user.id || null);
-      } catch (error: any) {
-        console.error("Error parsing user session:", error.message);
-        alert(`Error al obtener la sesión del usuario: ${error.message}`);
-      }
-    } else {
-      console.log("No user session found");
-    }
-  }, [session]);
 
   useEffect(() => {
     const fetchRoutines = async () => {
       try {
-        if (!userId) {
-          console.log("No user ID, skipping fetch");
-          setLoading(false);
-          return;
-        }
+        const user = JSON.parse(session || "{}");
+        const userId = user.userId;
         setLoading(true);
         const routines = await routinesController.getRecommendedRoutines(userId);
         setRutinas(routines);
@@ -45,10 +27,10 @@ export default function DashboardPage() {
       }
     };
     fetchRoutines();
-  }, [userId]);
+  }, [session]);
 
   // Función para añadir rutina a "Mis Rutinas"
-  const addRoutineToMyRoutines = async (routineId: string) => {
+  const addRoutineToMyRoutines = async (routineId: string, userId: string) => {
     if (!userId) {
       alert("Usuario no autenticado");
       return;
@@ -123,7 +105,9 @@ export default function DashboardPage() {
                 {/* Boton para añadir rutina a MIS RUTINASx */}
                 <button className="btn"
                   onClick={() => {
-                    addRoutineToMyRoutines(r.id);
+                    const user = JSON.parse(session || "{}");
+                    const userId = user.userId;
+                    addRoutineToMyRoutines(r.id, userId);
                   }}
                 >
                   Añadir a mis rutinas
