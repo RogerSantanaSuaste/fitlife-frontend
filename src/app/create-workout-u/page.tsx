@@ -103,11 +103,11 @@ export default function CreateWorkoutUPage() {
                         <p>Repeticiones Recomendas: {ex.repeticiones_recomendadas}</p>
                         <p>Musculo Principal: {ex.musculo_principal}</p>
                         <p>Musculo Secundario: {ex.musculo_secundario}</p>
-                        {ex.contradicciones.length > 0 && (
+                        {ex.contraindicaciones.length > 0 && (
                           <div>
-                            <strong>Contradicciones:</strong>
+                            <strong>Contraindicaciones:</strong>
                             <ul>
-                              {ex.contradicciones && ex.contradicciones.map((c) => (
+                              {ex.contraindicaciones && ex.contraindicaciones.map((c) => (
                                 <li key={c}>{c}</li>
                               ))}
                             </ul>

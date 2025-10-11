@@ -22,13 +22,19 @@ export default function DashboardPage() {
         console.error("Error parsing user session:", error.message);
         alert(`Error al obtener la sesión del usuario: ${error.message}`);
        }
+    } else {
+      console.log("No user session found");
     }
   }, []);
 
   useEffect(() => {
     const fetchRoutines = async () => {
       try {
-        if (!userId) return;
+        if (!userId) {
+          console.log("No user ID, skipping fetch");
+          setLoading(false);
+          return;
+        }
         setLoading(true);
         const routines = await routinesController.getRecommendedRoutines(userId);
         setRutinas(routines);

@@ -2,7 +2,7 @@ import axios from "axios";
 import { Routine, routineSchema } from "@/models/routines";
 import 'dotenv/config';
 
-const ROUTINE_PORT = process.env.ROUTINES_PORT || 3001;
+const ROUTINE_PORT = process.env.AUTH_PORT || 3006;
 
 export const getRoutineService = async (userId: string): Promise<Routine[]> => {
     const BASE_URL = `http://localhost:${ROUTINE_PORT}/api/cuidador/rutinas-aptas?userId=`;

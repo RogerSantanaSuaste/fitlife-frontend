@@ -18,7 +18,7 @@ export default function Header() {
       } catch (error: any) {
         console.error("Error parsing user session:", error.message);
         alert(`Error al obtener la sesión del usuario: ${error.message}`);
-       }
+      }
     }
   });
 

@@ -4,7 +4,7 @@ export const exerciseSchema = z.object({
     id: z.string(),
     nombre: z.string(),
     categoria: z.string(),
-    contradicciones: z.array(z.string()),
+    contraindicaciones: z.array(z.string()),
     nivel: z.enum(["BAJO", "INTERMEDIO", "AVANZADO"]),
     series_recomendadas: z.number().min(1, "Debe haber al menos 1 serie recomendada"),
     repeticiones_recomendadas: z.number().min(1, "Debe haber al menos 1 repetición recomendada"),
