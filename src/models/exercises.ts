@@ -1,11 +1,11 @@
 import { z } from "zod";
-
+export const levels = z.enum(["INICIANTE", "INTERMEDIO", "AVANZADO"]);
 export const exerciseSchema = z.object({
     id: z.string(),
     nombre: z.string(),
     categoria: z.string(),
     contraindicaciones: z.array(z.string()),
-    nivel: z.enum(["BAJO", "INTERMEDIO", "AVANZADO"]),
+    nivel: z.array(levels),
     series_recomendadas: z.number().min(1, "Debe haber al menos 1 serie recomendada"),
     repeticiones_recomendadas: z.number().min(1, "Debe haber al menos 1 repetición recomendada"),
     gifUrl: z.string(), // TODO: .url("Debe ser una URL válida") cuando se tengan URLs reales

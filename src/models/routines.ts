@@ -11,8 +11,6 @@ export const routineSchema = z.object({
     dias: z.array(daysOfWeek),
     ejercicios: z.array(exerciseSchema), 
     alimentos: z.array(foodSchema),
-    difficulty: z.enum(["BAJO", "INTERMEDIO", "AVANZADO"]).optional(),
-    duration: z.number().min(1, "La duración debe ser al menos 1 semana").optional(),
     isPublic: z.boolean().optional(),
 })
 
