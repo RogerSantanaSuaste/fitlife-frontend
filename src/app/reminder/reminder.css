@@ -1,0 +1,89 @@
+:root{ --star:#FBBF24; --danger:#ef4444; --danger-d:#dc2626; }
+
+/* área de contenido, igual que otros apartados */
+.app-content{ margin-left:10rem; margin-top:1rem; background:var(--app-bg); min-height:100vh; }
+@media (max-width:768px){ .app-content{ margin-left:0; } }
+.content-wrap{ width:min(1100px,100%); margin-inline:auto; }
+
+/* encabezado */
+.section-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+.section-title{ margin:0; font-size:clamp(22px,2.2vw,32px); font-weight:800; color:var(--text-strong); }
+.section-tools{ display:flex; gap:10px; align-items:center; }
+
+/* buscador */
+.search-mini{ position:relative; display:flex; align-items:center; gap:6px; border:1px solid var(--border); background:#fff; border-radius:999px; height:40px; padding:0 12px; }
+.search-mini input{ border:none; outline:none; background:transparent; width:200px; color:var(--text-strong); font-weight:600; }
+.search-mini svg{ opacity:.65; }
+
+/* lista */
+.todo-list{ list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+
+/* fila */
+.todo{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 14px 14px 16px; border:1px solid var(--border);
+  border-radius:16px; background:var(--surface);
+  box-shadow:var(--shadow); transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.todo-left{ display:flex; align-items:center; gap:12px; min-width:0; }
+.todo-title{ font-weight:700; color:var(--text-strong); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.todo-right{ display:flex; align-items:center; gap:8px; }
+
+/* checkbox (done) */
+.done{ position:absolute; opacity:0; pointer-events:none; }
+.chk{
+  width:22px; height:22px; border-radius:6px; border:2px solid var(--border);
+  background:#fff; display:grid; place-items:center; cursor:pointer; position:relative;
+  transition:border-color .2s ease, background .2s ease, box-shadow .2s ease, transform .12s ease;
+}
+.chk:hover{ transform:translateY(-1px); border-color:color-mix(in oklab, var(--accent) 28%, var(--border)); box-shadow:var(--shadow); }
+.done:checked + .chk{ border-color:var(--accent); background:linear-gradient(180deg,var(--accent),var(--accent)); box-shadow:var(--ring); }
+.done:checked + .chk::after{
+  content:""; width:8px; height:12px; border-right:2px solid #fff; border-bottom:2px solid #fff;
+  transform:rotate(45deg); position:absolute; top:2px; left:6px;
+}
+.done:checked ~ .todo-title{ color:color-mix(in oklab, var(--text-muted) 70%, #000); text-decoration:line-through; }
+
+/* resalte de fila cuando esté hecha (opcional, navegadores modernos) */
+.todo:has(.done:checked){
+  background: color-mix(in oklab, var(--primary) 8%, #fff);
+  border-color: color-mix(in oklab, var(--primary) 25%, var(--border));
+}
+
+/* estrella favorita */
+.fav{ position:absolute; opacity:0; pointer-events:none; }
+.icon-star{
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+  background:#fff; color: var(--text-muted);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.icon-star:hover{ transform:translateY(-1px); border-color:color-mix(in oklab,var(--star) 40%, var(--border)); box-shadow:var(--shadow); }
+.icon-star svg .star-fill{ display:none; }
+.icon-star svg .star-line{ display:block; }
+.fav:checked + .icon-star{
+  color:var(--star); border-color: color-mix(in oklab, var(--star) 44%, var(--border));
+  background:#fff; box-shadow:0 8px 18px rgba(251,191,36,.28);
+}
+.fav:checked + .icon-star svg .star-line{ display:none; }
+.fav:checked + .icon-star svg .star-fill{ display:block; }
+
+/* eliminar */
+.icon-delete{
+  width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+  background:#fff; color:var(--text-strong);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .12s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease, color .2s ease;
+}
+.icon-delete:hover{
+  transform:translateY(-1px);
+  border-color: color-mix(in oklab, var(--danger) 40%, var(--border));
+  background: color-mix(in oklab, #fff 92%, var(--danger));
+  color: var(--danger-d);
+  box-shadow:var(--shadow);
+}
+
+/* botón primario */
+.btn{ display:inline-flex; align-items:center; justify-content:center; padding:10px 16px; border-radius:999px; border:1px solid transparent; font-weight:700; cursor:pointer; transition:transform .12s ease, box-shadow .2s ease; }
+.btn:active{ transform:translateY(1px); }
+.btn--primary{ background:linear-gradient(180deg,var(--primary),var(--primary-d)); color:#fff; box-shadow:0 8px 20px rgba(15,126,197,.25); }
