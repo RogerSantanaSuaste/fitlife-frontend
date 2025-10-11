@@ -1,5 +1,5 @@
-import { assignRoutineToUserService, getAssignedRoutinesService, unassignRoutineService } from "@/services/managerService";
-import { PostAsssignRoutineResponse, AssignedRoutinesResponse } from "@/models/routineManager";
+import { assignRoutineToUserService, getAssignedRoutinesService, unassignRoutineService, createRoutineService } from "@/services/managerService";
+import { PostAsssignRoutineResponse, AssignedRoutinesResponse, PostCreateRoutine } from "@/models/routineManager";
 
 export const routineManagerController = {
     async assignRoutineToUser(userId: string, routineId: string): Promise<PostAsssignRoutineResponse> {
@@ -23,6 +23,14 @@ export const routineManagerController = {
             return await unassignRoutineService(userId, routineId);
         } catch (error: any) {
             throw new Error(`Error unassigning routine: ${error.message}`);
+        }
+    },
+
+    async createRoutine(data: PostCreateRoutine) {
+        try {
+            return await createRoutineService(data);
+        } catch (error: any) {
+            throw new Error(`Error creating routine: ${error.message}`);
         }
     }
 };

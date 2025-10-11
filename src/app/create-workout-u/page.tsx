@@ -1,10 +1,70 @@
 "use client";
-
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
+import { healthController } from "@/controllers/healthController";
+import { routineManagerController } from "@/controllers/routineManagerController";
+import { RecommendedFoodsAndExercises } from "@/models/userHealth";
+import { Food } from "@/models/foods";
+import { Exercise } from "@/models/exercises";
 
 export default function CreateWorkoutUPage() {
   const router = useRouter();
+  const [recommendedFoods, setRecommendedFoods] = useState<Food[] | null>(null);
+  const [recommendedExercises, setRecommendedExercises] = useState<Exercise[] | null>(null);
+  const [selectedFoods, setSelectedFoods] = useState<Food[]>([]);
+  const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([]);
+  const [nombre, setNombre] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [dias, setDias] = useState<("LUNES" | "MARTES" | "MIERCOLES" | "JUEVES" | "VIERNES" | "SABADO" | "DOMINGO")[]>(["LUNES", "MIERCOLES", "VIERNES"]);
+
+  useEffect(() => {
+    const session = localStorage.getItem("userSession");
+    if (session) {
+      try {
+        const user = JSON.parse(session);
+        setUserId(user.userId || null);
+      } catch (error: any) {
+        console.error("Error parsing user session:", error.message);
+        alert(`Error al obtener la sesión del usuario: ${error.message}`);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const recommendations = await healthController.getRecommendedFoodsAndExercises(userId || "");
+        setRecommendedFoods(recommendations.alimentos);
+        setRecommendedExercises(recommendations.ejercicios);
+      } catch (error) {
+        console.error("Error al obtener recomendaciones:", error);
+      }
+    };
+
+    fetchRecommendations();
+  }, [userId]);
+
+  // Función para guardar la rutina
+  const saveRoutine = async () => {
+    if (!userId) return;
+
+    const routineData = {
+      usuario_id: userId,
+      nombre,
+      dias,
+      ejercicios: selectedExercises,
+      alimentos: selectedFoods,
+    };
+
+    try {
+      await routineManagerController.createRoutine(routineData);
+      alert("Rutina guardada con éxito");
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error al guardar la rutina:", error);
+      alert("Error al guardar la rutina");
+    }
+  };
 
   return (
     <main className="app-content" role="main">
@@ -29,9 +89,80 @@ export default function CreateWorkoutUPage() {
             </div>
 
             <ul className="catalog-list">
-              <li className="empty">
-                Aquí se listará tu catálogo de ejercicios cuando conectes la data.
-              </li>
+              {
+                recommendedExercises && recommendedExercises.length > 0 ? (
+                  recommendedExercises.map((ex) => (
+                    <li className="catalog-item" key={ex.id}>
+                      <img className="catalog-thumb" src={ex.gifUrl} alt={ex.nombre} />
+                      <div className="catalog-body">
+                        <h3 className="catalog-name">{ex.nombre}</h3>
+                        <p>Categoria: {ex.categoria}</p>
+                        <p>Nivel: {ex.nivel}</p>
+                        <p>Series Recomendadas: {ex.series_recomendadas}</p>
+                        <p>Repeticiones Recomendas: {ex.repeticiones_recomendadas}</p>
+                        <p>Musculo Principal: {ex.musculo_principal}</p>
+                        <p>Musculo Secundario: {ex.musculo_secundario}</p>
+                        {ex.contradicciones.length > 0 && (
+                          <div>
+                            <strong>Contradicciones:</strong>
+                            <ul>
+                              {ex.contradicciones.map((c) => (
+                                <li key={c}>{c}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {ex.instrucciones.length > 0 && (
+                          <div>
+                            <strong>Instrucciones:</strong>
+                            <ol>
+                              {ex.instrucciones.map((inst, index) => (
+                                <li key={index}>{inst}</li>
+                              ))}
+                            </ol>
+                          </div>
+                        )}
+                        <button
+                          className="btn btn--small btn--primary"
+                          type="button"
+                          onClick={() => setSelectedExercises((prev) => {
+                            if (prev.find((e) => e.id === ex.id)) return prev;
+                            return [...prev, ex];
+                          })}
+                        >
+                          Añadir
+                        </button>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <li className="empty">No hay ejercicios recomendados.</li>
+                )}
+            </ul>
+            <ul className="catalog-list">
+              {
+                recommendedFoods && recommendedFoods.length > 0 ? (
+                  recommendedFoods.map((food) => (
+                    <li className="catalog-item" key={food.id}>
+                      <img className="catalog-thumb" src={food.imagen} alt={food.nombre} />
+                      <div className="catalog-body">
+                        <h3 className="catalog-name">{food.nombre}</h3>
+                        <button
+                          className="btn btn--small btn--primary"
+                          type="button"
+                          onClick={() => setSelectedFoods((prev) => {
+                            if (prev.find((f) => f.id === food.id)) return prev;
+                            return [...prev, food];
+                          })}
+                        >
+                          Añadir
+                        </button>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <li className="empty">No hay alimentos recomendados.</li>
+                )}
             </ul>
           </aside>
 
@@ -40,7 +171,9 @@ export default function CreateWorkoutUPage() {
             <div className="builder-row">
               <div className="form-group">
                 <label className="form-label">Título</label>
-                <input className="form-input" placeholder="Ej. Full Body Express" />
+                <input className="form-input" placeholder="Ej. Full Body Express" onChange={(e) => {
+                  setNombre(e.target.value);
+                }} />
               </div>
 
 
@@ -77,12 +210,30 @@ export default function CreateWorkoutUPage() {
 
             <h3 className="card__title" style={{ marginTop: 10 }}>Ejercicios seleccionados</h3>
             <ul className="selected-list">
-              <li className="empty">Todavía no has añadido ejercicios.</li>
+              {selectedExercises.length > 0 ? selectedExercises.map((ex) => (
+                <li className="selected-item" key={ex.id}>
+                  <img className="selected-thumb" src={ex.gifUrl} alt={ex.nombre} />
+                  <div className="selected-body">
+                    <h3 className="selected-name">{ex.nombre}</h3>
+                  </div>
+                </li>
+              )) : (
+                <li className="empty">Todavía no has añadido ejercicios.</li>
+              )}
             </ul>
 
             <h3 className="card__title" style={{ marginTop: 1 }}>Alimentos seleccionados</h3>
             <ul className="selected-list">
-              <li className="empty">Todavía no has añadido Alimentos.</li>
+              {selectedFoods.length > 0 ? selectedFoods.map((food) => (
+                <li className="selected-item" key={food.id}>
+                  <img className="selected-thumb" src={food.imagen} alt={food.nombre} />
+                  <div className="selected-body">
+                    <h3 className="selected-name">{food.nombre}</h3>
+                  </div>
+                </li>
+              )) : (
+                <li className="empty">Todavía no has añadido Alimentos.</li>
+              )}
             </ul>
 
             <div className="actions-bar">

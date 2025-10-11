@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { allergiesHealthUserInfoSchema, conditionsHealthUserInfoSchema } from "./allergies";
+import { exerciseSchema } from "./exercises";
+import { foodSchema } from "./foods";
 
 export const healthInfoSchema = z.object({
     pesoKg: z.number().min(30, "El peso debe ser al menos 30 kg").max(300, "El peso no puede exceder los 300 kg"),
@@ -22,8 +23,15 @@ export const healthUserResponseSchema = z.object({
     nivel: z.enum(["BAJO", "INTERMEDIO", "AVANZADO"]),
     imc: z.number().optional(),
     categoria_imc: z.string().optional(),
-    alergias: z.array(allergiesHealthUserInfoSchema),
-    condiciones: z.array(conditionsHealthUserInfoSchema),
+    alergias: z.array(z.string()),
+    condiciones: z.array(z.string()),
 });
 
 export type HealthUserResponse = z.infer<typeof healthUserResponseSchema>;
+
+export const recommendedFoodsAndExercisesSchema = z.object({
+    ejercicios: z.array(exerciseSchema),
+    alimentos: z.array(foodSchema),
+})
+
+export type RecommendedFoodsAndExercises = z.infer<typeof recommendedFoodsAndExercisesSchema>;

@@ -1,5 +1,7 @@
 import axios from "axios";
 import { postAssignRoutineResponseSchema, PostAssignRoutine, PostAsssignRoutineResponse, postAssignRoutineSchema, AssignedRoutinesResponse, AssignedRoutinesResponseSchema } from "@/models/routineManager";
+import { PostCreateRoutine, postCreateRoutineSchema } from "@/models/routineManager";
+import { Routine } from "@/models/routines";
 import 'dotenv/config';
 
 const MANAGER_PORT = process.env.MANAGER_PORT || '3002';
@@ -64,6 +66,28 @@ export const unassignRoutineService = async (userId: string, routineId: string) 
         } else {
             throw new Error("Error: No se pudo desasignar la rutina");
         }
+    } catch (error: any) {
+        if (error.response) {
+            // Server responded with a status other than 2xx
+            throw new Error(`Error: ${error.response.data.message || error.response.data.error.message}`);
+        } else if (error.request) {
+            // Request was made but no response received
+            throw new Error("Error: No response from server");
+        } else {
+            // Something else happened
+            throw new Error(`Error: ${error.message}`);
+        }
+    }
+}
+
+export const createRoutineService = async (data: PostCreateRoutine): Promise<Routine> => {
+    const BASE_URL = `http://localhost:${MANAGER_PORT}/rutinas`
+    try {
+        // Validate input data
+        postCreateRoutineSchema.parse(data);
+        // Make the API request
+        const response = await axios.post<Routine>(BASE_URL, data);
+        return response.data;
     } catch (error: any) {
         if (error.response) {
             // Server responded with a status other than 2xx

@@ -1,36 +1,59 @@
+"use client";
 import Link from "next/link";
+import React, { useState, useEffect} from "react";
+import { routinesController } from "@/controllers/routinesController";
+import { routineManagerController } from "@/controllers/routineManagerController";
+import { Routine } from "@/models/routines";
+
 
 export default function DashboardPage() {
-  // Datos de ejemplo (cámbialos por los reales)
-  const rutinas: {
-    id: string;
-    nombre: string;
-    dias: string[];
-    ejercicios: unknown[]; // snapshots
-    alimentos: unknown[];  // snapshots
-  }[] = [
-      {
-        id: "r-001",
-        nombre: "Mi rutina de fuerza",
-        dias: ["lunes", "miercoles", "viernes"],
-        ejercicios: [{}, {}, {}, {}],
-        alimentos: [{}, {}],
-      },
-      {
-        id: "r-002",
-        nombre: "Cardio ligero",
-        dias: ["martes", "jueves"],
-        ejercicios: [{}, {}, {}],
-        alimentos: [{}],
-      },
-      {
-        id: "r-003",
-        nombre: "Movilidad & Core",
-        dias: ["sabado"],
-        ejercicios: [{}, {}, {}, {}, {}],
-        alimentos: [{}],
-      },
-    ];
+  const [rutinas, setRutinas] = useState<Routine[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const session = localStorage.getItem("userSession");
+    if (session) {
+      try {
+        const user = JSON.parse(session);
+        setUserId(user.id || null);
+      } catch (error: any) {
+        console.error("Error parsing user session:", error.message);
+        alert(`Error al obtener la sesión del usuario: ${error.message}`);
+       }
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchRoutines = async () => {
+      try {
+        if (!userId) return;
+        setLoading(true);
+        const routines = await routinesController.getRecommendedRoutines(userId);
+        setRutinas(routines);
+      } catch (error: any) {
+        setError(error.message || "Error al obtener rutinas");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRoutines();
+  }, [userId]);
+
+  // Función para añadir rutina a "Mis Rutinas"
+  const addRoutineToMyRoutines = async (routineId: string) => {
+    if (!userId) {
+      alert("Usuario no autenticado");
+      return;
+    }
+    try {
+      await routineManagerController.assignRoutineToUser(userId, routineId);
+      alert("Rutina añadida a 'Mis Rutinas'");
+    } catch (error: any) {
+      alert(`Error al añadir rutina: ${error.message}`);
+    }
+  };
 
   return (
     <main className="app-content">
@@ -88,10 +111,17 @@ export default function DashboardPage() {
 
               <div className="actions">
                 {/* 👉 Redirige a /workout (sin id) */}
-                <Link href="/workout" className="btn btn--ghost btn--pill btn--with-icon" aria-label="Ver rutina">
+                <Link href={`/workout/${r.id}`} className="btn btn--ghost btn--pill btn--with-icon" aria-label="Ver rutina">
                   <span>Ver</span>
-                 
                 </Link>
+                {/* Boton para añadir rutina a MIS RUTINASx */}
+                <button className="btn"
+                onClick={() => {
+                  addRoutineToMyRoutines(r.id);
+                }}
+                >
+                  Añadir a mis rutinas
+                </button>
               </div>
             </article>
           ))}

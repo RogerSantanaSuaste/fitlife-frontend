@@ -25,3 +25,21 @@ export const getRoutineService = async (userId: string): Promise<Routine[]> => {
     }
 }
 
+export const getRoutineById = async (routineId: string): Promise<Routine> => {
+    const BASE_URL = `http://localhost:3001/rutinas-default/` // +"defaultId"
+    try {
+        const response = await axios.get<Routine>(`${BASE_URL}${routineId}`)
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            // Server responded with a status other than 2xx
+            throw new Error(`Error: ${error.response.data.message || error.response.data.error.message}`);
+        } else if (error.request) {
+            // Request was made but no response received
+            throw new Error("Error: No response from server");
+        } else {
+            // Something else happened
+            throw new Error(`Error: ${error.message}`);
+        }
+    }
+}

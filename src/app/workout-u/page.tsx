@@ -1,72 +1,28 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-
-type RoutineData = {
-  id: string;
-  nombre: string;
-  dias: string[];
-  ejercicios: unknown[];
-  alimentos: unknown[];
-};
-
-const INITIAL: RoutineData[] = [
-  {
-    id: "r-001",
-    nombre: "Mi rutina de fuerza",
-    dias: ["lunes", "miercoles", "viernes"],
-    ejercicios: [{}, {}, {}, {}],
-    alimentos: [{}, {}],
-  },
-  {
-    id: "r-002",
-    nombre: "Cardio ligero",
-    dias: ["martes", "jueves"],
-    ejercicios: [{}, {}, {}],
-    alimentos: [{}],
-  },
-  {
-    id: "r-003",
-    nombre: "Movilidad & Core",
-    dias: ["sabado"],
-    ejercicios: [{}, {}, {}, {}, {}],
-    alimentos: [{}],
-  },
-];
-
-const DIA_ABRV: Record<string, string> = {
-  lunes: "Lun",
-  martes: "Mar",
-  miercoles: "Mié",
-  miércoles: "Mié",
-  jueves: "Jue",
-  viernes: "Vie",
-  sabado: "Sáb",
-  sábado: "Sáb",
-  domingo: "Dom",
-};
-const abrev = (d: string) =>
-  DIA_ABRV[d.toLowerCase()] ?? d.charAt(0).toUpperCase() + d.slice(1);
+import { Routine } from "@/models/routines";
+import { routineManagerController } from "@/controllers/routineManagerController";
 
 export default function RutinasPage() {
   const [q, setQ] = useState("");
-  const [items, setItems] = useState<RoutineData[]>(INITIAL);
+  const [rutinas, setRutinas] = useState<Routine[]>([]);
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
-    if (!term) return items;
-    return items.filter((r) =>
+    if (!term) return rutinas;
+    return rutinas.filter((r) =>
       `${r.nombre} ${r.dias.join(" ")}`.toLowerCase().includes(term)
     );
-  }, [q, items]);
+  }, [q, rutinas]);
 
   const toggleFav = (id: string) =>
     setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const remove = (id: string) =>
-    setItems((arr) => arr.filter((r) => r.id !== id));
+    setRutinas((arr) => arr.filter((r) => r.id !== id));
 
   return (
     <main className="app-content">
@@ -103,9 +59,6 @@ export default function RutinasPage() {
         <ul className="routine-list" id="routineList">
           {filtered.map((r) => {
             const fav = !!favorites[r.id];
-            const dias = (r.dias || []).map(abrev);
-            const showDias = dias.slice(0, 6);
-            const extra = Math.max(0, dias.length - showDias.length);
 
             return (
               <li
@@ -119,13 +72,6 @@ export default function RutinasPage() {
                   <p className="card__text" style={{ margin: "6px 0 10px" }}>
                     {r.ejercicios.length} ejercicios • {r.alimentos.length} comidas
                   </p>
-
-                  <div className="chips">
-                    {showDias.map((d, i) => (
-                      <span className="chip" key={`${r.id}-d-${i}`}>{d}</span>
-                    ))}
-                    {extra > 0 && <span className="chip">+{extra}</span>}
-                  </div>
                 </div>
 
                 <div className="routine-actions">
