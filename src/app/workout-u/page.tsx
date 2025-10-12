@@ -1,22 +1,13 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Routine } from "@/models/routines";
 import { routineManagerController } from "@/controllers/routineManagerController";
 
 export default function RutinasPage() {
-  const [q, setQ] = useState("");
   const [rutinas, setRutinas] = useState<Routine[]>([]);
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
-
-  const filtered = useMemo(() => {
-    const term = q.trim().toLowerCase();
-    if (!term) return rutinas;
-    return rutinas.filter((r) =>
-      `${r.nombre} ${r.dias.join(" ")}`.toLowerCase().includes(term)
-    );
-  }, [q, rutinas]);
 
   const toggleFav = (id: string) =>
     setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -30,25 +21,7 @@ export default function RutinasPage() {
         {/* Encabezado */}
         <header className="section-head">
           <h1 className="section-title">Mis Rutinas</h1>
-
           <div className="section-tools">
-            {/* 🔎 buscador */}
-            <div className="search-mini">
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                <path
-                  fill="currentColor"
-                  d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
-                />
-              </svg>
-              <input
-                id="routinesSearch"
-                type="search"
-                placeholder="Buscar rutina..."
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-              />
-            </div>
-
             <Link href="/create-workout-u" className="btn btn--primary">
               Crear rutina
             </Link>
@@ -57,7 +30,7 @@ export default function RutinasPage() {
 
         {/* Lista */}
         <ul className="routine-list" id="routineList">
-          {filtered.map((r) => {
+          {rutinas.map((r) => {
             const fav = !!favorites[r.id];
 
             return (
@@ -68,7 +41,6 @@ export default function RutinasPage() {
               >
                 <div className="routine-main">
                   <div className="routine-title">{r.nombre}</div>
-
                   <p className="card__text" style={{ margin: "6px 0 10px" }}>
                     {r.ejercicios.length} ejercicios • {r.alimentos.length} comidas
                   </p>
@@ -118,9 +90,9 @@ export default function RutinasPage() {
             );
           })}
 
-          {filtered.length === 0 && (
+          {rutinas.length === 0 && (
             <li className="routine routine--empty" aria-live="polite">
-              No hay rutinas que coincidan con “{q}”.
+              No hay rutinas disponibles.
             </li>
           )}
         </ul>
