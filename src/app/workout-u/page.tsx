@@ -116,7 +116,7 @@ export default function RutinasPage() {
 
                   {/* Ver -> redirige SIEMPRE a /workout */}
                   <Link
-                    href="/workout"
+                    href={`/workout/${r.id}`}
                     className="btn btn--ghost btn--pill"
                     aria-label={`Ver rutina ${r.nombre}`}
                   >
