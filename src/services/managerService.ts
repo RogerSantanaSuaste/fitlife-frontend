@@ -61,7 +61,7 @@ export const getAssignedRoutinesService = async (userId: string): Promise<Assign
 export const unassignRoutineService = async (userId: string, routineId: string) => {
     try {
         const response = await axios.delete(`${BASE_URL}user/${userId}/routine/${routineId}`);
-        if (response.status === 204) {
+        if (response.status === 200) {
             return { message: "Rutina desasignada correctamente" };
         } else {
             throw new Error("Error: No se pudo desasignar la rutina");

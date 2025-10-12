@@ -2,6 +2,7 @@ import { z } from "zod";
 import { routineSchema } from "./routines";
 import { exerciseSchema } from "./exercises";
 import { foodSchema } from "./foods";
+import { assignRoutineToUserService } from "@/services/managerService";
 
 export const postAssignRoutineSchema = z.object({
     usuario_id: z.string(),
@@ -24,48 +25,13 @@ export type PostAsssignRoutineResponse = z.infer<typeof postAssignRoutineRespons
 export const AssignedRoutinesResponseSchema = z.object({
     userRoutineId: z.number(),
     userId: z.string(),
+    routineId: z.string(),
     assignedAt: z.string(), // ISO date string
     isActive: z.boolean(),
-    routine: routineSchema,
+    routineDetails: routineSchema,
 })
 
 export type AssignedRoutinesResponse = z.infer<typeof AssignedRoutinesResponseSchema>;
-
-/* Datos para crear una rutina
-{
-    "usuario_id": "user-123",
-    "nombre": "Mi Rutina de Lunes",
-    "dias": ["LUNES", "MIERCOLES"],
-    "ejercicios": [
-        {
-            "id": "ejer-001",
-            "nombre": "Press de Banca",
-            "categoria": "Pecho",
-            "contraindicaciones": [],
-            "nivel": "INTERMEDIO",
-            "series_recomendadas": 4,
-            "repeticiones_recomendadas": 10,
-            "gifUrl": "https://ejemplo.com/press_banca.gif",
-            "musculo_principal": "Pectoral mayor",
-            "musculo_secundario": "Tríceps, Deltoides anterior",
-            "instrucciones": [],
-            "isActive": true
-        }
-    ],
-    "alimentos": [
-        {
-            "id": "alim-001",
-            "nombre": "Pechuga de Pollo",
-            "categoria": "Proteína",
-            "imagen": "https://ejemplo.com/imagen_pollo.jpg",
-            "alergenos": [],
-            "calorias": 165,
-            "proteinas": 31,
-            "isActive": true
-        }
-    ]
-}
-*/
 
 export const postCreateRoutineSchema =z.object({
     usuario_id: z.string(),

@@ -1,19 +1,56 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Routine } from "@/models/routines";
 import { routineManagerController } from "@/controllers/routineManagerController";
+import { AssignedRoutinesResponse } from "@/models/routineManager";
 
 export default function RutinasPage() {
   const [rutinas, setRutinas] = useState<Routine[]>([]);
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
-
+  const session = localStorage.getItem("userSession");
   const toggleFav = (id: string) =>
     setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
 
-  const remove = (id: string) =>
-    setRutinas((arr) => arr.filter((r) => r.id !== id));
+  const removeMyRoutine = (routineId: string) => {
+    const user = session ? JSON.parse(session) : null;
+    if (!user) {
+      alert("Usuario no autenticado");
+      return;
+    }
+    const userId = user.userId;
+    routineManagerController.unassignRoutine(userId, routineId)
+      .then(() => {
+        setRutinas((arr) => arr.filter((r) => r.id !== routineId));
+      })
+      .catch((error) => {
+        alert(`Error al eliminar rutina: ${error.message}`);
+      });
+  }
+
+
+  useEffect(() => {
+    if (!session) return;
+    const fetchRoutines = async () => {
+      const user = JSON.parse(session)
+      const userId = user.userId || null;
+      if (!userId) {
+        alert("Usuario no autenticado");
+        return;
+      }
+      try {
+        const assignedRoutinesResponse: AssignedRoutinesResponse[] = await routineManagerController.getAssignedRoutines(userId);
+        const routines: Routine[] = assignedRoutinesResponse.map(ar => ({
+          ...ar.routineDetails
+        }))
+        setRutinas(routines);
+      } catch (error: any) {
+        alert(`Error fetching routines: ${error.message}`);
+      }
+    }
+    fetchRoutines();
+  }, [session]);
 
   return (
     <main className="app-content">
@@ -71,7 +108,7 @@ export default function RutinasPage() {
                   </label>
 
                   {/* 🗑 eliminar */}
-                  <button className="icon-delete" aria-label="Eliminar" onClick={() => remove(r.id)}>
+                  <button className="icon-delete" aria-label="Eliminar" onClick={() => removeMyRoutine(r.id)}>
                     <svg viewBox="0 0 26 24" width="24" height="24" fill="currentColor" aria-hidden="true">
                       <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
                     </svg>
