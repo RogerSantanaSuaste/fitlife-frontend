@@ -6,6 +6,7 @@ import 'dotenv/config';
 
 const MANAGER_PORT = process.env.MANAGER_PORT || '3002';
 const BASE_URL = `http://localhost:${MANAGER_PORT}/api/manager/`; // + /user/
+const ROUTINE_PORT = process.env.ROUTINE_PORT || 3001;
 // +/user/+userId/details
 // +/user/+userId/routine/+routineId
 // +/asign
@@ -81,7 +82,7 @@ export const unassignRoutineService = async (userId: string, routineId: string) 
 }
 
 export const createRoutineService = async (data: PostCreateRoutine): Promise<Routine> => {
-    const BASE_URL = `http://localhost:${MANAGER_PORT}/rutinas`
+    const BASE_URL = `http://localhost:${ROUTINE_PORT}/rutinas`
     try {
         // Validate input data
         postCreateRoutineSchema.parse(data);
