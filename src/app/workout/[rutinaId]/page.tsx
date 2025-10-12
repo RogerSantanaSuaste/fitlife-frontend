@@ -184,9 +184,9 @@ export default function WorkoutSinglePage() {
                   <span className="meta-value">{ex.musculo_secundario}</span>
                 </div>
 
-                {ex.contradicciones.length > 0 && (
+                {ex.contraindicaciones.length > 0 && (
                   <div className="contras">
-                    {ex.contradicciones.map((c) => (
+                    {ex.contraindicaciones.map((c) => (
                       <span className="contra" key={c}>
                         {c.toLowerCase().replaceAll("_", " ")}
                       </span>

@@ -1,5 +1,5 @@
 import { z } from "zod";
-export const levels = z.enum(["INICIANTE", "INTERMEDIO", "AVANZADO"]);
+export const levels = z.enum(["BAJO", "INTERMEDIO", "AVANZADO"]);
 export const exerciseSchema = z.object({
     id: z.string(),
     nombre: z.string(),
