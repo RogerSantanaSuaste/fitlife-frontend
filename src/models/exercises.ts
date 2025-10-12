@@ -8,7 +8,7 @@ export const exerciseSchema = z.object({
     nivel: z.array(levels),
     series_recomendadas: z.number().min(1, "Debe haber al menos 1 serie recomendada"),
     repeticiones_recomendadas: z.number().min(1, "Debe haber al menos 1 repetición recomendada"),
-    gifUrl: z.string(), // TODO: .url("Debe ser una URL válida") cuando se tengan URLs reales
+    gif_url: z.string(), // TODO: .url("Debe ser una URL válida") cuando se tengan URLs reales
     musculo_principal: z.string(),
     musculo_secundario: z.string(),
     instrucciones: z.array(z.string()),

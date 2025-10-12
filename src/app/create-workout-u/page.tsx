@@ -84,9 +84,7 @@ export default function CreateWorkoutUPage() {
           <aside className="catalog">
             <div className="catalog-head">
               <input className="form-input" placeholder="Buscar ejercicio…" disabled />
-              <select className="select" disabled>
-                <option>Categoría</option>
-              </select>
+
             </div>
 
             <ul className="catalog-list">
@@ -94,7 +92,7 @@ export default function CreateWorkoutUPage() {
                 recommendedExercises && recommendedExercises.length > 0 ? (
                   recommendedExercises.map((ex) => (
                     <li className="catalog-item" key={ex.id}>
-                      <img className="catalog-thumb" src={ex.gifUrl} alt={ex.nombre} />
+                      <img className="catalog-thumb" src={ex.gif_url} alt={ex.nombre} />
                       <div className="catalog-body">
                         <h3 className="catalog-name">{ex.nombre}</h3>
                         <p>Categoria: {ex.categoria}</p>
@@ -213,7 +211,7 @@ export default function CreateWorkoutUPage() {
             <ul className="selected-list">
               {selectedExercises.length > 0 ? selectedExercises.map((ex) => (
                 <li className="selected-item" key={ex.id}>
-                  <img className="selected-thumb" src={ex.gifUrl} alt={ex.nombre} />
+                  <img className="selected-thumb" src={ex.gif_url} alt={ex.nombre} />
                   <div className="selected-body">
                     <h3 className="selected-name">{ex.nombre}</h3>
                   </div>

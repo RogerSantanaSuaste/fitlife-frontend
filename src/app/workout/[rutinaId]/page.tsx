@@ -163,7 +163,7 @@ export default function WorkoutSinglePage() {
         <div className="ex-list">
           {rutina?.ejercicios.map((ex) => (
             <article className="ex-item" key={ex.id}>
-              <img className="ex-thumb" src={ex.gifUrl} alt={ex.nombre} />
+              <img className="ex-thumb" src={ex.gif_url} alt={ex.nombre} />
               <div className="ex-body">
                 <header className="ex-head">
                   <h3 className="ex-name">{ex.nombre}</h3>
