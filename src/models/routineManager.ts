@@ -2,7 +2,6 @@ import { z } from "zod";
 import { routineSchema } from "./routines";
 import { exerciseSchema } from "./exercises";
 import { foodSchema } from "./foods";
-import { assignRoutineToUserService } from "@/services/managerService";
 
 export const postAssignRoutineSchema = z.object({
     usuario_id: z.string(),
@@ -25,7 +24,6 @@ export type PostAsssignRoutineResponse = z.infer<typeof postAssignRoutineRespons
 export const AssignedRoutinesResponseSchema = z.object({
     userRoutineId: z.number(),
     userId: z.string(),
-    routineId: z.string(),
     assignedAt: z.string(), // ISO date string
     isActive: z.boolean(),
     routineDetails: routineSchema,

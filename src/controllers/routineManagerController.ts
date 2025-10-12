@@ -1,5 +1,6 @@
-import { assignRoutineToUserService, getAssignedRoutinesService, unassignRoutineService, createRoutineService } from "@/services/managerService";
+import { assignRoutineToUserService, getAssignedRoutinesService, getRoutinesByUserIdFromRoutinePortService, unassignRoutineService, createRoutineService } from "@/services/managerService";
 import { PostAsssignRoutineResponse, AssignedRoutinesResponse, PostCreateRoutine } from "@/models/routineManager";
+import { Routine } from "@/models/routines";
 
 export const routineManagerController = {
     async assignRoutineToUser(userId: string, routineId: string): Promise<PostAsssignRoutineResponse> {
@@ -10,9 +11,23 @@ export const routineManagerController = {
         }
     },
 
-    async getAssignedRoutines(userId: string): Promise<AssignedRoutinesResponse[]> {
+    async getAssignedRoutines(userId: string): Promise<Routine[]> {
+        // Uses two services, since there is a little of a mismatch in the databse schemas.
         try {
-            return await getAssignedRoutinesService(userId);
+            const assignedRoutinesFromManagerPort: AssignedRoutinesResponse[] = await getAssignedRoutinesService(userId);
+            const routinesFromRoutinesPort: Routine[] = await getRoutinesByUserIdFromRoutinePortService(userId);
+            // Map the assigned routines since they include the routine inside routineDetails
+            const mappedRoutines: Routine[] = assignedRoutinesFromManagerPort.map(ar => ({
+                ...ar.routineDetails
+            }))
+            // Merge both arrays, avoiding duplicates based on routine ID
+            const mergedRoutines: Routine[] = [...mappedRoutines];
+            routinesFromRoutinesPort.forEach(routine => {
+                if (!mergedRoutines.find(r => r.id === routine.id)) {
+                    mergedRoutines.push(routine);
+                }
+            });
+            return mergedRoutines;
         } catch (error: any) {
             throw new Error(`Error getting assigned routines: ${error.message}`);
         }

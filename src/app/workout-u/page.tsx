@@ -40,10 +40,7 @@ export default function RutinasPage() {
         return;
       }
       try {
-        const assignedRoutinesResponse: AssignedRoutinesResponse[] = await routineManagerController.getAssignedRoutines(userId);
-        const routines: Routine[] = assignedRoutinesResponse.map(ar => ({
-          ...ar.routineDetails
-        }))
+        const routines: Routine[] = await routineManagerController.getAssignedRoutines(userId);
         setRutinas(routines);
       } catch (error: any) {
         alert(`Error fetching routines: ${error.message}`);
@@ -116,7 +113,7 @@ export default function RutinasPage() {
 
                   {/* Ver -> redirige SIEMPRE a /workout */}
                   <Link
-                    href="/workout"
+                    href={`/workout/${r.id}`}
                     className="btn btn--ghost btn--pill"
                     aria-label={`Ver rutina ${r.nombre}`}
                   >

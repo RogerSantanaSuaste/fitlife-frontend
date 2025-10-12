@@ -59,6 +59,25 @@ export const getAssignedRoutinesService = async (userId: string): Promise<Assign
     }
 }
 
+export const getRoutinesByUserIdFromRoutinePortService = async (userId: string): Promise<Routine[]> => {
+    const BASE_URL = `http://localhost:${ROUTINE_PORT}/rutinas?usuarioId=${userId}`
+    try {
+        const response = await axios.get<Routine[]>(BASE_URL);
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            // Server responded with a status other than 2xx
+            throw new Error(`Error: ${error.response.data.message || error.response.data.error.message}`);
+        } else if (error.request) {
+            // Request was made but no response received
+            throw new Error("Error: No response from server");
+        } else {
+            // Something else happened
+            throw new Error(`Error: ${error.message}`);
+        }
+    }
+}
+
 export const unassignRoutineService = async (userId: string, routineId: string) => {
     try {
         const response = await axios.delete(`${BASE_URL}user/${userId}/routine/${routineId}`);
