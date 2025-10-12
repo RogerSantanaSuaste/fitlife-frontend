@@ -22,6 +22,7 @@ export default function WorkoutSinglePage() {
         const rutinaIdStr = Array.isArray(rutinaId) ? rutinaId[0] : rutinaId;
         const rutinaData = await routinesController.getRoutineDetails(rutinaIdStr);
         setRutina(rutinaData);
+        setLoading(false);
       } catch (error: any) {
         setError(error.message || "Error al obtener la rutina");
         alert(error.message || "Error al obtener la rutina");
