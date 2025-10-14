@@ -1,7 +1,6 @@
 import { getRoutineService, getRoutineById } from "@/services/routineService";
 import { Routine, routineSchema } from "@/models/routines";
 import { get } from "http";
-
 export const routinesController = {
     async getRecommendedRoutines(userId: string): Promise<Routine[]> {
         try {
@@ -13,9 +12,9 @@ export const routinesController = {
         }
     },
     
-    async getRoutineDetails(routineId: string): Promise<Routine> {
+    async getRoutineDetails(routineId: string, userId: string): Promise<Routine> {
         try {
-            const routine = await getRoutineById(routineId);
+            const routine = await getRoutineById(routineId, userId);
             routineSchema.parse(routine); // Validate the routine data
             return routine;
         } catch (error: any) {

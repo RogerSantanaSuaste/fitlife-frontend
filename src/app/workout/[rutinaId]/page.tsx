@@ -10,6 +10,9 @@ export default function WorkoutSinglePage() {
   const [rutina, setRutina] = useState<Routine | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const session = localStorage.getItem("userSession");
+  const user = session ? JSON.parse(session) : null;
+  const userId = user ? user.userId : null;
   useEffect(() => {
     const fetchRutina = async () => {
       try {
@@ -18,9 +21,14 @@ export default function WorkoutSinglePage() {
           alert("ID de rutina no proporcionado");
           return;
         }
+        if (!userId) {
+          setError("Usuario no autenticado");
+          alert("Usuario no autenticado");
+          return;
+        }
         setLoading(true);
         const rutinaIdStr = Array.isArray(rutinaId) ? rutinaId[0] : rutinaId;
-        const rutinaData = await routinesController.getRoutineDetails(rutinaIdStr);
+        const rutinaData = await routinesController.getRoutineDetails(rutinaIdStr, userId);
         setRutina(rutinaData);
         setLoading(false);
       } catch (error: any) {
@@ -29,7 +37,7 @@ export default function WorkoutSinglePage() {
       }
     }
     fetchRutina();
-  }, [rutinaId]);
+  }, [rutinaId, userId]);
   // ⚠️ Ejemplo local — puedes traerlo del servidor/DB
   /*
   const rutina = {
